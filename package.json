@@ -1,0 +1,16 @@
+{
+  "name": "tailwindcss-gradients",
+  "version": "1.0.0",
+  "description": "Tailwind CSS plugin to generate gradient background utilities",
+  "author": "Benoît Rouleau <benoit.rouleau@icloud.com>",
+  "license": "ISC",
+  "repository": "https://github.com/benface/tailwindcss-gradients.git",
+  "bugs": "https://github.com/benface/tailwindcss-gradients/issues",
+  "homepage": "https://github.com/benface/tailwindcss-gradients",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "dependencies": {
+    "lodash": "^4.17.10"
+  }
+}
