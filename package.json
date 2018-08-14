@@ -1,6 +1,6 @@
 {
   "name": "tailwindcss-gradients",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Tailwind CSS plugin to generate gradient background utilities",
   "author": "Benoît Rouleau <benoit.rouleau@icloud.com>",
   "license": "ISC",
