@@ -34,11 +34,11 @@ This plugin generates the following utilities:
   background-image: linear-gradient(to top, [color-1], [color-2], [...])
 }
 
-.bg-g-t-r-[name] {
+.bg-g-tr-[name] {
   background-image: linear-gradient(to top right, [color-1], [color-2], [...])
 }
 
-.bg-g-t-l-[name] {
+.bg-g-tl-[name] {
   background-image: linear-gradient(to top left, [color-1], [color-2], [...])
 }
 
@@ -50,11 +50,11 @@ This plugin generates the following utilities:
   background-image: linear-gradient(to bottom, [color-1], [color-2], [...])
 }
 
-.bg-g-b-r-[name] {
+.bg-g-br-[name] {
   background-image: linear-gradient(to bottom right, [color-1], [color-2], [...])
 }
 
-.bg-g-b-l-[name] {
+.bg-g-bl-[name] {
   background-image: linear-gradient(to bottom left, [color-1], [color-2], [...])
 }
 
