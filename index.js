@@ -2,24 +2,34 @@ const _ = require('lodash');
 
 module.exports = ({
   variants = {},
+  directions = {
+    't': 'to top',
+    'tr': 'to top right',
+    'r': 'to right',
+    'br': 'to bottom right',
+    'b': 'to bottom',
+    'bl': 'to bottom left',
+    'l': 'to left',
+    'tl': 'to top left',
+  },
   gradients = {},
 } = {}) => ({ e, addUtilities }) => {
   addUtilities(
     {
-      ...Object.assign(
-        {},
-        ..._.map(gradients, (colors, name) => {
-          if (!_.isArray(colors)) {
-            colors = ['transparent', colors];
+      ...(function() {
+        const utilities = {};
+        _.forEach(gradients, (gradientColors, gradientName) => {
+          if (!_.isArray(gradientColors) || gradientColors.length === 1) {
+            gradientColors = ['transparent', _.isArray(gradientColors) ? gradientColors[0] : gradientColors];
           }
-          return {
-            [`.${e(`bg-gradient-to-top-${name}`)}`]: { backgroundImage: `linear-gradient(to top, ${colors.join(', ')})` },
-            [`.${e(`bg-gradient-to-right-${name}`)}`]: { backgroundImage: `linear-gradient(to right, ${colors.join(', ')})` },
-            [`.${e(`bg-gradient-to-bottom-${name}`)}`]: { backgroundImage: `linear-gradient(to bottom, ${colors.join(', ')})` },
-            [`.${e(`bg-gradient-to-left-${name}`)}`]: { backgroundImage: `linear-gradient(to left, ${colors.join(', ')})` },
-          };
-        }),
-      ),
+          _.forEach(directions, (directionValue, directionName) => {
+            utilities[`.${e(`bg-gradient-${directionName}-${gradientName}`)}`] = {
+              backgroundImage: `linear-gradient(${directionValue}, ${gradientColors.join(', ')})`,
+            };
+          });
+        });
+        return utilities;
+      })(),
     },
     variants,
   );

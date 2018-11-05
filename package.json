@@ -4,13 +4,25 @@
   "description": "Tailwind CSS plugin to generate gradient background utilities",
   "author": "Benoît Rouleau <benoit.rouleau@icloud.com>",
   "license": "ISC",
-  "repository": "https://github.com/benface/tailwindcss-gradients.git",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/benface/tailwindcss-gradients.git"
+  },
   "bugs": "https://github.com/benface/tailwindcss-gradients/issues",
   "homepage": "https://github.com/benface/tailwindcss-gradients",
   "scripts": {
-    "test": "node test.js"
+    "test": "jest",
+    "release": "f(){ release-it $1 && github-release-from-changelog ;};f"
   },
   "dependencies": {
     "lodash": "^4.17.10"
+  },
+  "devDependencies": {
+    "github-release-from-changelog": "^1.3.2",
+    "jest": "^23.6.0",
+    "jest-matcher-css": "^1.0.3",
+    "postcss": "^7.0.5",
+    "release-it": "^7.6.2",
+    "tailwindcss": "^0.7.0"
   }
 }
