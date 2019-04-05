@@ -1,5 +1,5 @@
 {
-  "src": {
+  "git": {
     "tagName": "v%s"
   }
 }

@@ -1,4 +1,4 @@
-# Gradients Tailwind CSS Plugin
+# Gradients Plugin for Tailwind CSS
 
 ## Installation
 
@@ -11,21 +11,30 @@ npm install tailwindcss-gradients
 ```js
 // In your Tailwind CSS config
 {
-  plugins: [
-    require('tailwindcss-gradients')({
-      variants: ['responsive'],
+  theme: {
+    gradients: {
       directions: {
         't': 'to top',
+        'tr': 'to top right',
         'r': 'to right',
+        'br': 'to bottom right',
         'b': 'to bottom',
+        'bl': 'to bottom left',
         'l': 'to left',
+        'tl': 'to top left',
       },
-      gradients: {
+      colors: {
         'red': '#f00',
         'red-blue': ['#f00', '#00f'],
         'red-green-blue': ['#f00', '#0f0', '#00f'],
       },
-    }),
+    },
+  },
+  variants: {
+    gradients: ['responsive'],
+  },
+  plugins: [
+    require('tailwindcss-gradients')(),
   ],
 }
 ```
@@ -33,22 +42,10 @@ npm install tailwindcss-gradients
 This plugin generates the following utilities:
 
 ```css
-/* configurable with the "directions" and "gradients" options */
-.bg-gradient-[direction-name]-[gradient-name] {
-  background-image: linear-gradient([direction-value], [gradient-color-1], [gradient-color-2], [...])
+/* configurable with the "gradients" theme key */
+.bg-gradient-[direction-key]-[color-key] {
+  background-image: linear-gradient([direction-value], [color-value-1], [color-value-2], [...]);
 }
 ```
 
-Note: The `directions` option is optional and defaults to:
-```js
-{
-  't': 'to top',
-  'tr': 'to top right',
-  'r': 'to right',
-  'br': 'to bottom right',
-  'b': 'to bottom',
-  'bl': 'to bottom left',
-  'l': 'to left',
-  'tl': 'to top left',
-}
-```
+Note: The `directions` key in `theme.gradients` is optional and defaults to the above values. Also, the `gradients` variants key defaults to `['responsive']`.
