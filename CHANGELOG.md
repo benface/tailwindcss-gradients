@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project mostly adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0-beta.2] - 2019-04-04
+
+### Fixed
+- Single-color gradients now generate a transparent `rgba()` version of the color instead of using the `transparent` keyword, which is interpreted as `rgba(0, 0, 0, 0)` (transparent black) by Safari and the CSS spec
+
 ## [2.0.0-beta.1] - 2019-04-04
 
 ### Added

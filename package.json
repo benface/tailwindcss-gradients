@@ -15,6 +15,7 @@
     "release": "f(){ release-it $1 && github-release-from-changelog ;};f"
   },
   "dependencies": {
+    "color": "^3.1.0",
     "lodash": "^4.17.11"
   },
   "devDependencies": {
