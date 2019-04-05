@@ -38,6 +38,24 @@ npm install tailwindcss-gradients
   ],
 }
 ```
+or you can reference your existing theme colors:
+```js
+{
+  theme: {
+    colors: {
+      'red': '#f00',
+      'blue': '#00f',
+    },
+    gradients: theme => ({
+      // directions: { ... },
+      colors: theme('colors'),
+    }),
+  },
+  plugins: [
+    require('tailwindcss-gradients')(),
+  ],
+}
+```
 
 This plugin generates the following utilities:
 
