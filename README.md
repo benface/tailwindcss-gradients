@@ -9,7 +9,7 @@ npm install tailwindcss-gradients
 ## Usage
 
 ```js
-// In your Tailwind CSS config
+// tailwind.config.js
 {
   theme: {
     gradients: {
@@ -31,7 +31,7 @@ npm install tailwindcss-gradients
     },
   },
   variants: {
-    gradients: ['responsive', 'hover'], // defaults to ['responsive']
+    gradients: ['responsive'], // defaults to ['responsive']
   },
   plugins: [
     require('tailwindcss-gradients')(),
@@ -60,7 +60,7 @@ or you can reference your existing theme colors:
 This plugin generates the following utilities:
 
 ```css
-/* configurable with the "gradients" theme key */
+/* configurable with the "gradients" theme object */
 .bg-gradient-[direction-key]-[color-key] {
   background-image: linear-gradient([direction-value], [color-value-1], [color-value-2], [...]);
 }
