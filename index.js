@@ -2,7 +2,7 @@ const _ = require('lodash');
 const Color = require('color');
 
 module.exports = function() {
-  return ({ config, e, addUtilities }) => {
+  return ({ config, e, addUtilities, variants }) => {
     const defaultDirections = {
       't': 'to top',
       'tr': 'to top right',
@@ -33,6 +33,6 @@ module.exports = function() {
       return utilities;
     })();
 
-    addUtilities(gradientUtilities, config('variants.gradients', defaultVariants));
+    addUtilities(gradientUtilities, variants('gradients', defaultVariants));
   };
 };

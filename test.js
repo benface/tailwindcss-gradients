@@ -14,20 +14,14 @@ const generatePluginCss = (config) => {
             'sm': '640px',
           },
         },
-        corePlugins: (function() {
-          let disabledCorePlugins = {};
-          Object.keys(defaultConfig.variants).forEach(corePlugin => {
-            disabledCorePlugins[corePlugin] = false;
-          });
-          return disabledCorePlugins;
-        })(),
+        corePlugins: false,
         plugins: [
           gradientsPlugin(),
         ],
       }, config)
     )
   )
-  .process('@tailwind utilities;', {
+  .process('@tailwind utilities', {
     from: undefined,
   })
   .then(result => {
@@ -95,28 +89,28 @@ test('there are default directions', () => {
   }).then(css => {
     expect(css).toMatchCss(`
       .bg-gradient-t-red {
-        background-image: linear-gradient(to top, rgba(255, 0, 0, 0), #f00);
+        background-image: linear-gradient(to top, rgba(255, 0, 0, 0), #f00)
       }
       .bg-gradient-tr-red {
-        background-image: linear-gradient(to top right, rgba(255, 0, 0, 0), #f00);
+        background-image: linear-gradient(to top right, rgba(255, 0, 0, 0), #f00)
       }
       .bg-gradient-r-red {
-        background-image: linear-gradient(to right, rgba(255, 0, 0, 0), #f00);
+        background-image: linear-gradient(to right, rgba(255, 0, 0, 0), #f00)
       }
       .bg-gradient-br-red {
-        background-image: linear-gradient(to bottom right, rgba(255, 0, 0, 0), #f00);
+        background-image: linear-gradient(to bottom right, rgba(255, 0, 0, 0), #f00)
       }
       .bg-gradient-b-red {
-        background-image: linear-gradient(to bottom, rgba(255, 0, 0, 0), #f00);
+        background-image: linear-gradient(to bottom, rgba(255, 0, 0, 0), #f00)
       }
       .bg-gradient-bl-red {
-        background-image: linear-gradient(to bottom left, rgba(255, 0, 0, 0), #f00);
+        background-image: linear-gradient(to bottom left, rgba(255, 0, 0, 0), #f00)
       }
       .bg-gradient-l-red {
-        background-image: linear-gradient(to left, rgba(255, 0, 0, 0), #f00);
+        background-image: linear-gradient(to left, rgba(255, 0, 0, 0), #f00)
       }
       .bg-gradient-tl-red {
-        background-image: linear-gradient(to top left, rgba(255, 0, 0, 0), #f00);
+        background-image: linear-gradient(to top left, rgba(255, 0, 0, 0), #f00)
       }
     `);
   });
@@ -142,13 +136,13 @@ test('directions can be customized', () => {
   }).then(css => {
     expect(css).toMatchCss(`
       .bg-gradient-to-top-red {
-        background-image: linear-gradient(to top, rgba(255, 0, 0, 0), #f00);
+        background-image: linear-gradient(to top, rgba(255, 0, 0, 0), #f00)
       }
       .bg-gradient-to-top-green {
-        background-image: linear-gradient(to top, rgba(0, 255, 0, 0), #0f0);
+        background-image: linear-gradient(to top, rgba(0, 255, 0, 0), #0f0)
       }
       .bg-gradient-to-top-blue {
-        background-image: linear-gradient(to top, rgba(0, 0, 255, 0), #00f);
+        background-image: linear-gradient(to top, rgba(0, 0, 255, 0), #00f)
       }
     `);
   });
@@ -173,10 +167,10 @@ test('gradients can have multiple colors', () => {
   }).then(css => {
     expect(css).toMatchCss(`
       .bg-gradient-to-bottom-red-green {
-        background-image: linear-gradient(to bottom, #f00, #0f0);
+        background-image: linear-gradient(to bottom, #f00, #0f0)
       }
       .bg-gradient-to-bottom-red-green-blue {
-        background-image: linear-gradient(to bottom, #f00, #0f0, #00f);
+        background-image: linear-gradient(to bottom, #f00, #0f0, #00f)
       }
     `);
   });
@@ -202,16 +196,16 @@ test('multiple directions and multiple colors can be used together', () => {
   }).then(css => {
     expect(css).toMatchCss(`
       .bg-gradient-to-top-red {
-        background-image: linear-gradient(to top, rgba(255, 0, 0, 0), #f00);
+        background-image: linear-gradient(to top, rgba(255, 0, 0, 0), #f00)
       }
       .bg-gradient-to-bottom-red {
-        background-image: linear-gradient(to bottom, rgba(255, 0, 0, 0), #f00);
+        background-image: linear-gradient(to bottom, rgba(255, 0, 0, 0), #f00)
       }
       .bg-gradient-to-top-green {
-        background-image: linear-gradient(to top, rgba(0, 255, 0, 0), #0f0);
+        background-image: linear-gradient(to top, rgba(0, 255, 0, 0), #0f0)
       }
       .bg-gradient-to-bottom-green {
-        background-image: linear-gradient(to bottom, rgba(0, 255, 0, 0), #0f0);
+        background-image: linear-gradient(to bottom, rgba(0, 255, 0, 0), #0f0)
       }
     `);
   });
@@ -237,10 +231,10 @@ test('colors can be referenced from the theme with a closure', () => {
   }).then(css => {
     expect(css).toMatchCss(`
       .bg-gradient-b-red {
-        background-image: linear-gradient(to bottom, rgba(255, 0, 0, 0), #f00);
+        background-image: linear-gradient(to bottom, rgba(255, 0, 0, 0), #f00)
       }
       .bg-gradient-b-blue {
-        background-image: linear-gradient(to bottom, rgba(0, 0, 255, 0), #00f);
+        background-image: linear-gradient(to bottom, rgba(0, 0, 255, 0), #00f)
       }
     `);
   });
@@ -261,11 +255,11 @@ test('responsive variants are generated by default', () => {
   }).then(css => {
     expect(css).toMatchCss(`
       .bg-gradient-t-red {
-        background-image: linear-gradient(to top, rgba(255, 0, 0, 0), #f00);
+        background-image: linear-gradient(to top, rgba(255, 0, 0, 0), #f00)
       }
       @media (min-width: 640px) {
         .sm\\:bg-gradient-t-red {
-          background-image: linear-gradient(to top, rgba(255, 0, 0, 0), #f00);
+          background-image: linear-gradient(to top, rgba(255, 0, 0, 0), #f00)
         }
       }
     `);
@@ -290,13 +284,13 @@ test('variants can be customized', () => {
   }).then(css => {
     expect(css).toMatchCss(`
       .bg-gradient-t-red {
-        background-image: linear-gradient(to top, rgba(255, 0, 0, 0), #f00);
+        background-image: linear-gradient(to top, rgba(255, 0, 0, 0), #f00)
       }
       .hover\\:bg-gradient-t-red:hover {
-        background-image: linear-gradient(to top, rgba(255, 0, 0, 0), #f00);
+        background-image: linear-gradient(to top, rgba(255, 0, 0, 0), #f00)
       }
       .active\\:bg-gradient-t-red:active {
-        background-image: linear-gradient(to top, rgba(255, 0, 0, 0), #f00);
+        background-image: linear-gradient(to top, rgba(255, 0, 0, 0), #f00)
       }
     `);
   });
