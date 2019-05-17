@@ -1,9 +1,19 @@
 const _ = require('lodash');
 const Color = require('color');
 
+const listColors = function(colors, transparentFirst = true) {
+  if (!_.isArray(colors) || colors.length === 1) {
+    const color = _.isArray(colors) ? colors[0] : colors;
+    const parsedColor = Color(color);
+    const transparentColor = parsedColor.alpha(0).rgb().string();
+    colors = transparentFirst ? [transparentColor, color] : [color, transparentColor];
+  }
+  return colors.join(', ');
+};
+
 module.exports = function() {
   return ({ theme, variants, e, addUtilities }) => {
-    const defaultGradientDirections = {
+    const defaultLinearGradientDirections = {
       't': 'to top',
       'tr': 'to top right',
       'r': 'to right',
@@ -13,30 +23,66 @@ module.exports = function() {
       'l': 'to left',
       'tl': 'to top left',
     };
-    const defaultGradientColors = {};
-    const defaultGradientVariants = ['responsive'];
+    const defaultLinearGradientColors = {};
+    const defaultLinearGradientVariants = ['responsive'];
+    const defaultRadialGradientShapes = {
+      'default': 'ellipse',
+    };
+    const defaultRadialGradientSizes = {
+      'default': 'closest-side',
+    };
+    const defaultRadialGradientPositions = {
+      'default': 'center',
+      't': 'top',
+      'tr': 'top right',
+      'r': 'right',
+      'br': 'bottom right',
+      'b': 'bottom',
+      'bl': 'bottom left',
+      'l': 'left',
+      'tl': 'top left',
+    };
+    const defaultRadialGradientColors = {};
+    const defaultRadialGradientVariants = ['responsive'];
 
-    const gradientDirections = theme('gradients.directions', defaultGradientDirections);
-    const gradientColors = theme('gradients.colors', defaultGradientColors);
-    const gradientVariants = variants('gradients', defaultGradientVariants);
+    const linearGradientDirections = theme('linearGradients.directions', defaultLinearGradientDirections);
+    const linearGradientColors = theme('linearGradients.colors', defaultLinearGradientColors);
+    const linearGradientVariants = variants('linearGradients', defaultLinearGradientVariants);
+    const radialGradientShapes = theme('radialGradients.shapes', defaultRadialGradientShapes);
+    const radialGradientSizes = theme('radialGradients.sizes', defaultRadialGradientSizes);
+    const radialGradientPositions = theme('radialGradients.positions', defaultRadialGradientPositions);
+    const radialGradientColors = theme('radialGradients.colors', defaultRadialGradientColors);
+    const radialGradientVariants = variants('radialGradients', defaultRadialGradientVariants);
 
-    const gradientUtilities = (function() {
+    const linearGradientUtilities = (function() {
       let utilities = {};
-      _.forEach(gradientColors, (colors, colorKey) => {
-        if (!_.isArray(colors) || colors.length === 1) {
-          let color = _.isArray(colors) ? colors[0] : colors;
-          let parsedColor = Color(color);
-          colors = [parsedColor.alpha(0).rgb().string(), color];
-        }
-        _.forEach(gradientDirections, (direction, directionKey) => {
+      _.forEach(linearGradientColors, (colors, colorKey) => {
+        _.forEach(linearGradientDirections, (direction, directionKey) => {
           utilities[`.${e(`bg-gradient-${directionKey}-${colorKey}`)}`] = {
-            backgroundImage: `linear-gradient(${direction}, ${colors.join(', ')})`,
+            backgroundImage: `linear-gradient(${direction}, ${listColors(colors, true)})`,
           };
         });
       });
       return utilities;
     })();
 
-    addUtilities(gradientUtilities, gradientVariants);
+    const radialGradientUtilities = (function() {
+      let utilities = {};
+      _.forEach(radialGradientColors, (colors, colorKey) => {
+        _.forEach(radialGradientPositions, (position, positionKey) => {
+          _.forEach(radialGradientSizes, (size, sizeKey) => {
+            _.forEach(radialGradientShapes, (shape, shapeKey) => {
+              utilities[`.${e(`bg-radial${shapeKey === 'default' ? '' : `-${shapeKey}`}${sizeKey === 'default' ? '' : `-${sizeKey}`}${positionKey === 'default' ? '' : `-${positionKey}`}-${colorKey}`)}`] = {
+                backgroundImage: `radial-gradient(${shape} ${size} at ${position}, ${listColors(colors, false)})`,
+              };
+            });
+          });
+        });
+      });
+      return utilities;
+    })();
+
+    addUtilities(linearGradientUtilities, linearGradientVariants);
+    addUtilities(radialGradientUtilities, radialGradientVariants);
   };
 };

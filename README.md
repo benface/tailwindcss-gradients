@@ -12,7 +12,7 @@ npm install tailwindcss-gradients
 // tailwind.config.js
 {
   theme: {
-    gradients: {
+    linearGradients: {
       directions: { // defaults to these values
         't': 'to top',
         'tr': 'to top right',
@@ -29,9 +29,34 @@ npm install tailwindcss-gradients
         'red-green-blue': ['#f00', '#0f0', '#00f'],
       },
     },
+    radialGradients: {
+      shapes: { // defaults to this value
+        'default': 'ellipse',
+      },
+      sizes: { // defaults to this value
+        'default': 'closest-side',
+      },
+      positions: { // defaults to these values
+        'default': 'center',
+        't': 'top',
+        'tr': 'top right',
+        'r': 'right',
+        'br': 'bottom right',
+        'b': 'bottom',
+        'bl': 'bottom left',
+        'l': 'left',
+        'tl': 'top left',
+      },
+      colors: { // defaults to {}
+        'red': '#f00',
+        'red-blue': ['#f00', '#00f'],
+        'red-green-blue': ['#f00', '#0f0', '#00f'],
+      },
+    },
   },
   variants: {
-    gradients: ['responsive'], // defaults to ['responsive']
+    linearGradients: ['responsive'], // defaults to ['responsive']
+    radialGradients: ['responsive'], // defaults to ['responsive']
   },
   plugins: [
     require('tailwindcss-gradients')(),
@@ -46,8 +71,14 @@ or you can reference your existing theme colors:
       'red': '#f00',
       'blue': '#00f',
     },
-    gradients: theme => ({
+    linearGradients: theme => ({
       // directions: { ... },
+      colors: theme('colors'),
+    }),
+    radialGradients: theme => ({
+      // shapes: { ... },
+      // sizes: { ... },
+      // positions: { ... },
       colors: theme('colors'),
     }),
   },
@@ -60,8 +91,14 @@ or you can reference your existing theme colors:
 This plugin generates the following utilities:
 
 ```css
-/* configurable with the "gradients" theme object */
+/* configurable with the "linearGradients" theme object */
 .bg-gradient-[direction-key]-[color-key] {
   background-image: linear-gradient([direction-value], [color-value-1], [color-value-2], [...]);
+}
+
+/* configurable with the "radialGradients" theme object */
+/* note that the "default" [shape-key], [size-key], and [position-key] are omitted from the class */
+.bg-radial-[shape-key]-[size-key]-[position-key]-[color-key] {
+  background-image: radial-gradient([shape-value] [size-value] at [position-value], [color-value-1], [color-value-2], [...]);
 }
 ```

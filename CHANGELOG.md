@@ -5,9 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project mostly adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.0.0] - 2019-05-17
+
+### Added since 2.0.0-beta.2
+- Added radial gradient utilities (see `README` for more info)
 
 ### Changed since 2.0.0-beta.2
+- Renamed the `gradients` theme and variants keys to `linearGradients`
 - Added support for global variants thanks to Tailwind’s `variants()` helper function
 
 ### Added since 1.x
@@ -52,7 +56,8 @@ and this project mostly adheres to [Semantic Versioning](https://semver.org/spec
 
 Initial release
 
-[Unreleased]: https://github.com/benface/tailwindcss-gradients/compare/v2.0.0-beta.2...HEAD
+[Unreleased]: https://github.com/benface/tailwindcss-gradients/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/benface/tailwindcss-gradients/compare/v2.0.0-beta.2...v2.0.0
 [2.0.0-beta.2]: https://github.com/benface/tailwindcss-gradients/compare/v2.0.0-beta.1...v2.0.0-beta.2
 [2.0.0-beta.1]: https://github.com/benface/tailwindcss-gradients/compare/v1.1.0...v2.0.0-beta.1
 [1.1.0]: https://github.com/benface/tailwindcss-gradients/compare/v1.0.1...v1.1.0
