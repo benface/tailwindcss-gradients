@@ -1,12 +1,12 @@
 const _ = require('lodash');
 const Color = require('color');
 
-const colorsAreSupported = function(colors) {
+const normalizeColors = function(colors, transparentFirst = true) {
+  colors = _.castArray(colors);
   const unsupportedColorKeywords = ['inherit', 'initial', 'unset', 'revert'];
-  return _.intersection(unsupportedColorKeywords, colors).length === 0;
-};
-
-const listColors = function(colors, transparentFirst = true) {
+  if (_.intersection(unsupportedColorKeywords, colors).length > 0) {
+    return null;
+  }
   if (colors.length === 1) {
     const color = colors[0];
     let transparentColor = 'transparent';
@@ -18,7 +18,7 @@ const listColors = function(colors, transparentFirst = true) {
     }
     colors = transparentFirst ? [transparentColor, color] : [color, transparentColor];
   }
-  return colors.join(', ');
+  return colors;
 };
 
 module.exports = function() {
@@ -67,13 +67,13 @@ module.exports = function() {
     const linearGradientUtilities = (function() {
       let utilities = {};
       _.forEach(linearGradientColors, (colors, colorKey) => {
-        colors = _.castArray(colors);
-        if (!colorsAreSupported(colors)) {
+        colors = normalizeColors(colors, true);
+        if (!colors) {
           return; // continue
         }
         _.forEach(linearGradientDirections, (direction, directionKey) => {
           utilities[`.${e(`bg-gradient-${directionKey}-${colorKey}`)}`] = {
-            backgroundImage: `linear-gradient(${direction}, ${listColors(colors, true)})`,
+            backgroundImage: `linear-gradient(${direction}, ${colors.join(', ')})`,
           };
         });
       });
@@ -83,15 +83,15 @@ module.exports = function() {
     const radialGradientUtilities = (function() {
       let utilities = {};
       _.forEach(radialGradientColors, (colors, colorKey) => {
-        colors = _.castArray(colors);
-        if (!colorsAreSupported(colors)) {
+        colors = normalizeColors(colors, false);
+        if (!colors) {
           return; // continue
         }
         _.forEach(radialGradientPositions, (position, positionKey) => {
           _.forEach(radialGradientSizes, (size, sizeKey) => {
             _.forEach(radialGradientShapes, (shape, shapeKey) => {
               utilities[`.${e(`bg-radial${shapeKey === 'default' ? '' : `-${shapeKey}`}${sizeKey === 'default' ? '' : `-${sizeKey}`}${positionKey === 'default' ? '' : `-${positionKey}`}-${colorKey}`)}`] = {
-                backgroundImage: `radial-gradient(${shape} ${size} at ${position}, ${listColors(colors, false)})`,
+                backgroundImage: `radial-gradient(${shape} ${size} at ${position}, ${colors.join(', ')})`,
               };
             });
           });
