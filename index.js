@@ -1,11 +1,21 @@
 const _ = require('lodash');
 const Color = require('color');
 
+const colorsAreSupported = function(colors) {
+  const unsupportedColorKeywords = ['inherit', 'initial', 'unset', 'revert'];
+  return _.intersection(unsupportedColorKeywords, colors).length === 0;
+};
+
 const listColors = function(colors, transparentFirst = true) {
-  if (!_.isArray(colors) || colors.length === 1) {
-    const color = _.isArray(colors) ? colors[0] : colors;
-    const parsedColor = Color(color);
-    const transparentColor = parsedColor.alpha(0).rgb().string();
+  if (colors.length === 1) {
+    const color = colors[0];
+    let transparentColor = 'transparent';
+    try {
+      const parsedColor = Color(color);
+      transparentColor = parsedColor.alpha(0).rgb().string();
+    }
+    catch (e) {
+    }
     colors = transparentFirst ? [transparentColor, color] : [color, transparentColor];
   }
   return colors.join(', ');
@@ -57,6 +67,10 @@ module.exports = function() {
     const linearGradientUtilities = (function() {
       let utilities = {};
       _.forEach(linearGradientColors, (colors, colorKey) => {
+        colors = _.castArray(colors);
+        if (!colorsAreSupported(colors)) {
+          return; // continue
+        }
         _.forEach(linearGradientDirections, (direction, directionKey) => {
           utilities[`.${e(`bg-gradient-${directionKey}-${colorKey}`)}`] = {
             backgroundImage: `linear-gradient(${direction}, ${listColors(colors, true)})`,
@@ -69,6 +83,10 @@ module.exports = function() {
     const radialGradientUtilities = (function() {
       let utilities = {};
       _.forEach(radialGradientColors, (colors, colorKey) => {
+        colors = _.castArray(colors);
+        if (!colorsAreSupported(colors)) {
+          return; // continue
+        }
         _.forEach(radialGradientPositions, (position, positionKey) => {
           _.forEach(radialGradientSizes, (size, sizeKey) => {
             _.forEach(radialGradientShapes, (shape, shapeKey) => {

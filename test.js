@@ -355,6 +355,101 @@ test('colors can be referenced from the theme with a closure', () => {
   });
 });
 
+test('color keywords are accepted', () => {
+  return generatePluginCss({
+    theme: {
+      colors: {
+        'white': 'white',
+        'black': 'black',
+        'transparent': 'transparent',
+        'current': 'currentColor',
+      },
+      linearGradients: theme => ({
+        directions: {
+          't': 'to top',
+        },
+        colors: theme('colors'),
+      }),
+      radialGradients: theme => ({
+        positions: {
+          't': 'top',
+        },
+        colors: theme('colors'),
+      }),
+    },
+    variants: {
+      linearGradients: [],
+      radialGradients: [],
+    },
+  }).then(css => {
+    expect(css).toMatchCss(`
+      .bg-gradient-t-white {
+        background-image: linear-gradient(to top, rgba(255, 255, 255, 0), white)
+      }
+      .bg-gradient-t-black {
+        background-image: linear-gradient(to top, rgba(0, 0, 0, 0), black)
+      }
+      .bg-gradient-t-transparent {
+        background-image: linear-gradient(to top, rgba(0, 0, 0, 0), transparent)
+      }
+      .bg-gradient-t-current {
+        background-image: linear-gradient(to top, transparent, currentColor)
+      }
+      .bg-radial-t-white {
+        background-image: radial-gradient(ellipse closest-side at top, white, rgba(255, 255, 255, 0))
+      }
+      .bg-radial-t-black {
+        background-image: radial-gradient(ellipse closest-side at top, black, rgba(0, 0, 0, 0))
+      }
+      .bg-radial-t-transparent {
+        background-image: radial-gradient(ellipse closest-side at top, transparent, rgba(0, 0, 0, 0))
+      }
+      .bg-radial-t-current {
+        background-image: radial-gradient(ellipse closest-side at top, currentColor, transparent)
+      }
+    `);
+  });
+});
+
+test('some keywords such as inherit are skipped', () => {
+  return generatePluginCss({
+    theme: {
+      colors: {
+        'inherit': 'inherit',
+        'red': '#f00',
+        'initial': 'initial',
+        'unset': 'unset',
+        'revert': 'revert',
+      },
+      linearGradients: theme => ({
+        directions: {
+          't': 'to top',
+        },
+        colors: theme('colors'),
+      }),
+      radialGradients: theme => ({
+        positions: {
+          't': 'top',
+        },
+        colors: theme('colors'),
+      }),
+    },
+    variants: {
+      linearGradients: [],
+      radialGradients: [],
+    },
+  }).then(css => {
+    expect(css).toMatchCss(`
+      .bg-gradient-t-red {
+        background-image: linear-gradient(to top, rgba(255, 0, 0, 0), #f00)
+      }
+      .bg-radial-t-red {
+        background-image: radial-gradient(ellipse closest-side at top, #f00, rgba(255, 0, 0, 0))
+      }
+    `);
+  });
+});
+
 test('radial gradient shapes and sizes can be customized', () => {
   return generatePluginCss({
     theme: {
