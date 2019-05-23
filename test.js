@@ -118,7 +118,7 @@ test('linear gradients have default directions', () => {
         background-image: linear-gradient(to bottom right, rgba(255, 0, 0, 0), #f00)
       }
       .bg-gradient-b-red {
-        background-image: linear-gradient(to bottom, rgba(255, 0, 0, 0), #f00)
+        background-image: linear-gradient(rgba(255, 0, 0, 0), #f00)
       }
       .bg-gradient-bl-red {
         background-image: linear-gradient(to bottom left, rgba(255, 0, 0, 0), #f00)
@@ -149,31 +149,31 @@ test('radial gradients have default shapes, sizes, and positions', () => {
   }).then(css => {
     expect(css).toMatchCss(`
       .bg-radial-red {
-        background-image: radial-gradient(ellipse closest-side at center, #f00, rgba(255, 0, 0, 0))
+        background-image: radial-gradient(closest-side, #f00, rgba(255, 0, 0, 0))
       }
       .bg-radial-t-red {
-        background-image: radial-gradient(ellipse closest-side at top, #f00, rgba(255, 0, 0, 0))
+        background-image: radial-gradient(closest-side at top, #f00, rgba(255, 0, 0, 0))
       }
       .bg-radial-tr-red {
-        background-image: radial-gradient(ellipse closest-side at top right, #f00, rgba(255, 0, 0, 0))
+        background-image: radial-gradient(closest-side at top right, #f00, rgba(255, 0, 0, 0))
       }
       .bg-radial-r-red {
-        background-image: radial-gradient(ellipse closest-side at right, #f00, rgba(255, 0, 0, 0))
+        background-image: radial-gradient(closest-side at right, #f00, rgba(255, 0, 0, 0))
       }
       .bg-radial-br-red {
-        background-image: radial-gradient(ellipse closest-side at bottom right, #f00, rgba(255, 0, 0, 0))
+        background-image: radial-gradient(closest-side at bottom right, #f00, rgba(255, 0, 0, 0))
       }
       .bg-radial-b-red {
-        background-image: radial-gradient(ellipse closest-side at bottom, #f00, rgba(255, 0, 0, 0))
+        background-image: radial-gradient(closest-side at bottom, #f00, rgba(255, 0, 0, 0))
       }
       .bg-radial-bl-red {
-        background-image: radial-gradient(ellipse closest-side at bottom left, #f00, rgba(255, 0, 0, 0))
+        background-image: radial-gradient(closest-side at bottom left, #f00, rgba(255, 0, 0, 0))
       }
       .bg-radial-l-red {
-        background-image: radial-gradient(ellipse closest-side at left, #f00, rgba(255, 0, 0, 0))
+        background-image: radial-gradient(closest-side at left, #f00, rgba(255, 0, 0, 0))
       }
       .bg-radial-tl-red {
-        background-image: radial-gradient(ellipse closest-side at top left, #f00, rgba(255, 0, 0, 0))
+        background-image: radial-gradient(closest-side at top left, #f00, rgba(255, 0, 0, 0))
       }
     `);
   });
@@ -217,7 +217,7 @@ test('directions and positions can be customized', () => {
         background-image: linear-gradient(to top, rgba(0, 0, 255, 0), #00f)
       }
       .bg-radial-off-center-red {
-        background-image: radial-gradient(ellipse closest-side at 55% 60%, #f00, rgba(255, 0, 0, 0))
+        background-image: radial-gradient(closest-side at 55% 60%, #f00, rgba(255, 0, 0, 0))
       }
     `);
   });
@@ -252,16 +252,16 @@ test('gradients can have multiple colors', () => {
   }).then(css => {
     expect(css).toMatchCss(`
       .bg-gradient-to-bottom-red-green {
-        background-image: linear-gradient(to bottom, #f00, #0f0)
+        background-image: linear-gradient(#f00, #0f0)
       }
       .bg-gradient-to-bottom-red-green-blue {
-        background-image: linear-gradient(to bottom, #f00, #0f0, #00f)
+        background-image: linear-gradient(#f00, #0f0, #00f)
       }
       .bg-radial-red-green {
-        background-image: radial-gradient(ellipse closest-side at center, #f00, #0f0)
+        background-image: radial-gradient(closest-side, #f00, #0f0)
       }
       .bg-radial-red-green-blue {
-        background-image: radial-gradient(ellipse closest-side at center, #f00, #0f0, #00f)
+        background-image: radial-gradient(closest-side, #f00, #0f0, #00f)
       }
     `);
   });
@@ -301,25 +301,25 @@ test('multiple directions/positions and multiple colors can be used together', (
         background-image: linear-gradient(to top, rgba(255, 0, 0, 0), #f00)
       }
       .bg-gradient-to-bottom-red {
-        background-image: linear-gradient(to bottom, rgba(255, 0, 0, 0), #f00)
+        background-image: linear-gradient(rgba(255, 0, 0, 0), #f00)
       }
       .bg-gradient-to-top-green {
         background-image: linear-gradient(to top, rgba(0, 255, 0, 0), #0f0)
       }
       .bg-gradient-to-bottom-green {
-        background-image: linear-gradient(to bottom, rgba(0, 255, 0, 0), #0f0)
+        background-image: linear-gradient(rgba(0, 255, 0, 0), #0f0)
       }
       .bg-radial-top-red {
-        background-image: radial-gradient(ellipse closest-side at top, #f00, rgba(255, 0, 0, 0))
+        background-image: radial-gradient(closest-side at top, #f00, rgba(255, 0, 0, 0))
       }
       .bg-radial-bottom-red {
-        background-image: radial-gradient(ellipse closest-side at bottom, #f00, rgba(255, 0, 0, 0))
+        background-image: radial-gradient(closest-side at bottom, #f00, rgba(255, 0, 0, 0))
       }
       .bg-radial-top-green {
-        background-image: radial-gradient(ellipse closest-side at top, #0f0, rgba(0, 255, 0, 0))
+        background-image: radial-gradient(closest-side at top, #0f0, rgba(0, 255, 0, 0))
       }
       .bg-radial-bottom-green {
-        background-image: radial-gradient(ellipse closest-side at bottom, #0f0, rgba(0, 255, 0, 0))
+        background-image: radial-gradient(closest-side at bottom, #0f0, rgba(0, 255, 0, 0))
       }
     `);
   });
@@ -346,10 +346,10 @@ test('colors can be referenced from the theme with a closure', () => {
   }).then(css => {
     expect(css).toMatchCss(`
       .bg-gradient-b-red {
-        background-image: linear-gradient(to bottom, rgba(255, 0, 0, 0), #f00)
+        background-image: linear-gradient(rgba(255, 0, 0, 0), #f00)
       }
       .bg-gradient-b-blue {
-        background-image: linear-gradient(to bottom, rgba(0, 0, 255, 0), #00f)
+        background-image: linear-gradient(rgba(0, 0, 255, 0), #00f)
       }
     `);
   });
@@ -396,16 +396,16 @@ test('color keywords are accepted', () => {
         background-image: linear-gradient(to top, transparent, currentColor)
       }
       .bg-radial-t-white {
-        background-image: radial-gradient(ellipse closest-side at top, white, rgba(255, 255, 255, 0))
+        background-image: radial-gradient(closest-side at top, white, rgba(255, 255, 255, 0))
       }
       .bg-radial-t-black {
-        background-image: radial-gradient(ellipse closest-side at top, black, rgba(0, 0, 0, 0))
+        background-image: radial-gradient(closest-side at top, black, rgba(0, 0, 0, 0))
       }
       .bg-radial-t-transparent {
-        background-image: radial-gradient(ellipse closest-side at top, transparent, rgba(0, 0, 0, 0))
+        background-image: radial-gradient(closest-side at top, transparent, rgba(0, 0, 0, 0))
       }
       .bg-radial-t-current {
-        background-image: radial-gradient(ellipse closest-side at top, currentColor, transparent)
+        background-image: radial-gradient(closest-side at top, currentColor, transparent)
       }
     `);
   });
@@ -444,7 +444,7 @@ test('some keywords such as inherit are skipped', () => {
         background-image: linear-gradient(to top, rgba(255, 0, 0, 0), #f00)
       }
       .bg-radial-t-red {
-        background-image: radial-gradient(ellipse closest-side at top, #f00, rgba(255, 0, 0, 0))
+        background-image: radial-gradient(closest-side at top, #f00, rgba(255, 0, 0, 0))
       }
     `);
   });
@@ -479,52 +479,52 @@ test('radial gradient shapes and sizes can be customized', () => {
   }).then(css => {
     expect(css).toMatchCss(`
       .bg-radial-red {
-        background-image: radial-gradient(circle closest-side at center, #f00, rgba(255, 0, 0, 0))
+        background-image: radial-gradient(circle closest-side, #f00, rgba(255, 0, 0, 0))
       }
       .bg-radial-ellipse-red {
-        background-image: radial-gradient(ellipse closest-side at center, #f00, rgba(255, 0, 0, 0))
+        background-image: radial-gradient(closest-side, #f00, rgba(255, 0, 0, 0))
       }
       .bg-radial-cover-red {
-        background-image: radial-gradient(circle farthest-corner at center, #f00, rgba(255, 0, 0, 0))
+        background-image: radial-gradient(circle, #f00, rgba(255, 0, 0, 0))
       }
       .bg-radial-ellipse-cover-red {
-        background-image: radial-gradient(ellipse farthest-corner at center, #f00, rgba(255, 0, 0, 0))
+        background-image: radial-gradient(#f00, rgba(255, 0, 0, 0))
       }
       .bg-radial-tr-red {
         background-image: radial-gradient(circle closest-side at top right, #f00, rgba(255, 0, 0, 0))
       }
       .bg-radial-ellipse-tr-red {
-        background-image: radial-gradient(ellipse closest-side at top right, #f00, rgba(255, 0, 0, 0))
+        background-image: radial-gradient(closest-side at top right, #f00, rgba(255, 0, 0, 0))
       }
       .bg-radial-cover-tr-red {
-        background-image: radial-gradient(circle farthest-corner at top right, #f00, rgba(255, 0, 0, 0))
+        background-image: radial-gradient(circle at top right, #f00, rgba(255, 0, 0, 0))
       }
       .bg-radial-ellipse-cover-tr-red {
-        background-image: radial-gradient(ellipse farthest-corner at top right, #f00, rgba(255, 0, 0, 0))
+        background-image: radial-gradient(at top right, #f00, rgba(255, 0, 0, 0))
       }
       .bg-radial-green-blue {
-        background-image: radial-gradient(circle closest-side at center, #0f0, #00f)
+        background-image: radial-gradient(circle closest-side, #0f0, #00f)
       }
       .bg-radial-ellipse-green-blue {
-        background-image: radial-gradient(ellipse closest-side at center, #0f0, #00f)
+        background-image: radial-gradient(closest-side, #0f0, #00f)
       }
       .bg-radial-cover-green-blue {
-        background-image: radial-gradient(circle farthest-corner at center, #0f0, #00f)
+        background-image: radial-gradient(circle, #0f0, #00f)
       }
       .bg-radial-ellipse-cover-green-blue {
-        background-image: radial-gradient(ellipse farthest-corner at center, #0f0, #00f)
+        background-image: radial-gradient(#0f0, #00f)
       }
       .bg-radial-tr-green-blue {
         background-image: radial-gradient(circle closest-side at top right, #0f0, #00f)
       }
       .bg-radial-ellipse-tr-green-blue {
-        background-image: radial-gradient(ellipse closest-side at top right, #0f0, #00f)
+        background-image: radial-gradient(closest-side at top right, #0f0, #00f)
       }
       .bg-radial-cover-tr-green-blue {
-        background-image: radial-gradient(circle farthest-corner at top right, #0f0, #00f)
+        background-image: radial-gradient(circle at top right, #0f0, #00f)
       }
       .bg-radial-ellipse-cover-tr-green-blue {
-        background-image: radial-gradient(ellipse farthest-corner at top right, #0f0, #00f)
+        background-image: radial-gradient(at top right, #0f0, #00f)
       }
     `);
   });
@@ -556,14 +556,14 @@ test('responsive variants are generated by default', () => {
         background-image: linear-gradient(to top, rgba(255, 0, 0, 0), #f00)
       }
       .bg-radial-red {
-        background-image: radial-gradient(ellipse closest-side at center, #f00, rgba(255, 0, 0, 0))
+        background-image: radial-gradient(closest-side, #f00, rgba(255, 0, 0, 0))
       }
       @media (min-width: 640px) {
         .sm\\:bg-gradient-t-red {
           background-image: linear-gradient(to top, rgba(255, 0, 0, 0), #f00)
         }
         .sm\\:bg-radial-red {
-          background-image: radial-gradient(ellipse closest-side at center, #f00, rgba(255, 0, 0, 0))
+          background-image: radial-gradient(closest-side, #f00, rgba(255, 0, 0, 0))
         }
       }
     `);
@@ -606,10 +606,10 @@ test('variants can be customized', () => {
         background-image: linear-gradient(to top, rgba(255, 0, 0, 0), #f00)
       }
       .bg-radial-b-blue {
-        background-image: radial-gradient(ellipse closest-side at bottom, #00f, rgba(0, 0, 255, 0))
+        background-image: radial-gradient(closest-side at bottom, #00f, rgba(0, 0, 255, 0))
       }
       .group:hover .group-hover\\:bg-radial-b-blue {
-        background-image: radial-gradient(ellipse closest-side at bottom, #00f, rgba(0, 0, 255, 0))
+        background-image: radial-gradient(closest-side at bottom, #00f, rgba(0, 0, 255, 0))
       }
     `);
   });

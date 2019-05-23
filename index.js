@@ -64,6 +64,11 @@ module.exports = function() {
     const radialGradientColors = theme('radialGradients.colors', defaultRadialGradientColors);
     const radialGradientVariants = variants('radialGradients', defaultRadialGradientVariants);
 
+    const cssDefaultLinearGradientDirections = ['to bottom', '180deg', '0.5turn', '200grad', '3.1416rad'];
+    const cssDefaultRadialGradientShape = 'ellipse';
+    const cssDefaultRadialGradientSize = 'farthest-corner';
+    const cssDefaultRadialGradientPositions = ['center', 'center center', '50%', '50% 50%', 'center 50%', '50% center'];
+
     const linearGradientUtilities = (function() {
       let utilities = {};
       _.forEach(linearGradientColors, (colors, colorKey) => {
@@ -73,7 +78,7 @@ module.exports = function() {
         }
         _.forEach(linearGradientDirections, (direction, directionKey) => {
           utilities[`.${e(`bg-gradient-${directionKey}-${colorKey}`)}`] = {
-            backgroundImage: `linear-gradient(${direction}, ${colors.join(', ')})`,
+            backgroundImage: `linear-gradient(${_.includes(cssDefaultLinearGradientDirections, direction) ? '' : `${direction}, `}${colors.join(', ')})`,
           };
         });
       });
@@ -90,8 +95,18 @@ module.exports = function() {
         _.forEach(radialGradientPositions, (position, positionKey) => {
           _.forEach(radialGradientSizes, (size, sizeKey) => {
             _.forEach(radialGradientShapes, (shape, shapeKey) => {
+              let firstArgumentValues = [];
+              if (shape !== cssDefaultRadialGradientShape) {
+                firstArgumentValues.push(shape);
+              }
+              if (size !== cssDefaultRadialGradientSize) {
+                firstArgumentValues.push(size);
+              }
+              if (!_.includes(cssDefaultRadialGradientPositions, position)) {
+                firstArgumentValues.push(`at ${position}`);
+              }
               utilities[`.${e(`bg-radial${shapeKey === 'default' ? '' : `-${shapeKey}`}${sizeKey === 'default' ? '' : `-${sizeKey}`}${positionKey === 'default' ? '' : `-${positionKey}`}-${colorKey}`)}`] = {
-                backgroundImage: `radial-gradient(${shape} ${size} at ${position}, ${colors.join(', ')})`,
+                backgroundImage: `radial-gradient(${firstArgumentValues.length > 0 ? `${firstArgumentValues.join(' ')}, ` : ''}${colors.join(', ')})`,
               };
             });
           });

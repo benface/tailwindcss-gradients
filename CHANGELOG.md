@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project mostly adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+- Values that are optional in `linear-gradient()` and `radial-gradient()` (direction, shape, size, and position) are now omitted when the value is the same as the CSS-defined default value
+
 ## [2.0.1] - 2019-05-23
 
 ### Fixed
