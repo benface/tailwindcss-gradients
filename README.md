@@ -8,6 +8,30 @@ npm install tailwindcss-gradients
 
 ## Usage
 
+### Simple
+
+```js
+{
+  theme: {
+    colors: {
+      'red': '#f00',
+      'blue': '#00f',
+    },
+    linearGradients: theme => ({
+      colors: theme('colors'),
+    }),
+    radialGradients: theme => ({
+      colors: theme('colors'),
+    }),
+  },
+  plugins: [
+    require('tailwindcss-gradients')(),
+  ],
+}
+```
+
+### Advanced
+
 ```js
 // tailwind.config.js
 {
@@ -27,6 +51,7 @@ npm install tailwindcss-gradients
         'red': '#f00',
         'red-blue': ['#f00', '#00f'],
         'red-green-blue': ['#f00', '#0f0', '#00f'],
+        'black-white-with-stops': ['#000', '#000 45%', '#fff 55%', '#fff'],
       },
     },
     radialGradients: {
@@ -51,36 +76,39 @@ npm install tailwindcss-gradients
         'red': '#f00',
         'red-blue': ['#f00', '#00f'],
         'red-green-blue': ['#f00', '#0f0', '#00f'],
+        'black-white-with-stops': ['#000', '#000 45%', '#fff 55%', '#fff'],
       },
     },
+    repeatingLinearGradients: theme => ({
+      directions: theme('linearGradients.directions'), // defaults to the same values as linearGradients’ directions
+      colors: theme('linearGradients.colors'), // defaults to {}
+      lengths: { // defaults to {}
+        'sm': '25px',
+        'md': '50px',
+        'lg': '100px',
+      },
+    }),
+    repeatingRadialGradients: theme => ({
+      shapes: { // defaults to this value
+        'default': 'ellipse',
+      },
+      sizes: { // defaults to this value
+        'default': 'farthest-corner',
+      },
+      positions: theme('radialGradients.positions'), // defaults to the same values as radialGradients’ positions
+      colors: theme('radialGradients.colors'), // defaults to {}
+      lengths: { // defaults to {}
+        'sm': '25px',
+        'md': '50px',
+        'lg': '100px',
+      },
+    }),
   },
   variants: {
     linearGradients: ['responsive'], // defaults to ['responsive']
     radialGradients: ['responsive'], // defaults to ['responsive']
-  },
-  plugins: [
-    require('tailwindcss-gradients')(),
-  ],
-}
-```
-or you can reference your existing theme colors:
-```js
-{
-  theme: {
-    colors: {
-      'red': '#f00',
-      'blue': '#00f',
-    },
-    linearGradients: theme => ({
-      // directions: { ... },
-      colors: theme('colors'),
-    }),
-    radialGradients: theme => ({
-      // shapes: { ... },
-      // sizes: { ... },
-      // positions: { ... },
-      colors: theme('colors'),
-    }),
+    repeatingLinearGradients: ['responsive'], // defaults to ['responsive']
+    repeatingRadialGradients: ['responsive'], // defaults to ['responsive']
   },
   plugins: [
     require('tailwindcss-gradients')(),
@@ -100,5 +128,16 @@ This plugin generates the following utilities:
 /* note that the "default" [shape-key], [size-key], and [position-key] are omitted from the class */
 .bg-radial-[shape-key]-[size-key]-[position-key]-[color-key] {
   background-image: radial-gradient([shape-value] [size-value] at [position-value], [color-value-1], [color-value-2], [...]);
+}
+
+/* configurable with the "repeatingLinearGradients" theme object */
+.bg-gradient-[direction-key]-[color-key]-[length-key] {
+  background-image: repeating-linear-gradient([direction-value], [color-value-1], [color-value-2], [...] [length-value]);
+}
+
+/* configurable with the "repeatingRadialGradients" theme object */
+/* note that the "default" [shape-key], [size-key], and [position-key] are omitted from the class */
+.bg-radial-[shape-key]-[size-key]-[position-key]-[color-key]-[length-key] {
+  background-image: repeating-radial-gradient([shape-value] [size-value] at [position-value], [color-value-1], [color-value-2], [...] [length-value]);
 }
 ```
