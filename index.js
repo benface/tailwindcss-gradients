@@ -23,6 +23,7 @@ const normalizeColors = function(colors, transparentFirst = true) {
 
 module.exports = function() {
   return ({ theme, variants, e, addUtilities }) => {
+    const defaultBackgroundImageVariants = ['responsive'];
     const defaultLinearGradientDirections = {
       't': 'to top',
       'tr': 'to top right',
@@ -67,6 +68,7 @@ module.exports = function() {
     const defaultRepeatingRadialGradientLengths = {};
     const defaultRepeatingRadialGradientVariants = ['responsive'];
 
+    const backgroundImageVariants = variants('backgroundImage', defaultBackgroundImageVariants);
     const linearGradientDirections = theme('linearGradients.directions', defaultLinearGradientDirections);
     const linearGradientColors = theme('linearGradients.colors', defaultLinearGradientColors);
     const linearGradientVariants = variants('linearGradients', defaultLinearGradientVariants);
@@ -114,6 +116,12 @@ module.exports = function() {
         firstArgumentValues.push(`at ${position}`);
       }
       return `${!_.isNil(length) ? 'repeating-' : ''}radial-gradient(${firstArgumentValues.length > 0 ? `${firstArgumentValues.join(' ')}, ` : ''}${colors.join(', ')}${length ? ` ${length}` : ''})`;
+    };
+
+    const backgroundImageUtilities = {
+      '.bg-none': {
+        backgroundImage: 'none',
+      },
     };
 
     const linearGradientUtilities = (function() {
@@ -192,6 +200,7 @@ module.exports = function() {
       return utilities;
     })();
 
+    addUtilities(backgroundImageUtilities, backgroundImageVariants);
     addUtilities(linearGradientUtilities, linearGradientVariants);
     addUtilities(radialGradientUtilities, radialGradientVariants);
     addUtilities(repeatingLinearGradientUtilities, repeatingLinearGradientVariants);

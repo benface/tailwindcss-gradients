@@ -104,11 +104,12 @@ npm install tailwindcss-gradients
       },
     }),
   },
-  variants: {
-    linearGradients: ['responsive'], // defaults to ['responsive']
-    radialGradients: ['responsive'], // defaults to ['responsive']
-    repeatingLinearGradients: ['responsive'], // defaults to ['responsive']
-    repeatingRadialGradients: ['responsive'], // defaults to ['responsive']
+  variants: { // all the following default to ['responsive']
+    backgroundImage: ['responsive'], // this is for the "bg-none" utility
+    linearGradients: ['responsive'],
+    radialGradients: ['responsive'],
+    repeatingLinearGradients: ['responsive'],
+    repeatingRadialGradients: ['responsive'],
   },
   plugins: [
     require('tailwindcss-gradients')(),
@@ -119,6 +120,10 @@ npm install tailwindcss-gradients
 This plugin generates the following utilities:
 
 ```css
+.bg-none {
+  background-image: none;
+}
+
 /* configurable with the "linearGradients" theme object */
 .bg-gradient-[direction-key]-[color-key] {
   background-image: linear-gradient([direction-value], [color-value-1], [color-value-2], [...]);
