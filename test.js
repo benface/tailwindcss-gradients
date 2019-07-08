@@ -66,6 +66,14 @@ test('no gradient is generated without directions or positions', () => {
           'blue': '#00f',
         },
       },
+      conicGradients: {
+        positions: {},
+        colors: {
+          'red': '#f00',
+          'green': '#0f0',
+          'blue': '#00f',
+        },
+      },
     },
   }).then(css => {
     expect(css).toMatchCss(`
@@ -94,6 +102,16 @@ test('no gradient is generated without colors', () => {
         colors: {},
       },
       radialGradients: {
+        positions: {
+          'default': 'center',
+          't': 'top',
+          'r': 'right',
+          'b': 'bottom',
+          'l': 'left',
+        },
+        colors: {},
+      },
+      conicGradients: {
         positions: {
           'default': 'center',
           't': 'top',
@@ -164,7 +182,7 @@ test('linear gradients have default directions', () => {
   });
 });
 
-test('radial gradients have default shapes, sizes, and positions', () => {
+test('radial gradients have a default shape, size, and positions', () => {
   return generatePluginCss({
     theme: {
       radialGradients: {
@@ -175,7 +193,6 @@ test('radial gradients have default shapes, sizes, and positions', () => {
     },
     variants: {
       backgroundImage: [],
-      linearGradients: [],
       radialGradients: [],
     },
   }).then(css => {
@@ -214,6 +231,55 @@ test('radial gradients have default shapes, sizes, and positions', () => {
   });
 });
 
+test('conic gradients have a default starting angle and positions', () => {
+  return generatePluginCss({
+    theme: {
+      conicGradients: {
+        colors: {
+          'red': '#f00',
+        },
+      },
+    },
+    variants: {
+      backgroundImage: [],
+      conicGradients: [],
+    },
+  }).then(css => {
+    expect(css).toMatchCss(`
+      .bg-none {
+        background-image: none;
+      }
+      .bg-conic-red {
+        background-image: conic-gradient(#f00, rgba(255, 0, 0, 0));
+      }
+      .bg-conic-t-red {
+        background-image: conic-gradient(at top, #f00, rgba(255, 0, 0, 0));
+      }
+      .bg-conic-tr-red {
+        background-image: conic-gradient(at top right, #f00, rgba(255, 0, 0, 0));
+      }
+      .bg-conic-r-red {
+        background-image: conic-gradient(at right, #f00, rgba(255, 0, 0, 0));
+      }
+      .bg-conic-br-red {
+        background-image: conic-gradient(at bottom right, #f00, rgba(255, 0, 0, 0));
+      }
+      .bg-conic-b-red {
+        background-image: conic-gradient(at bottom, #f00, rgba(255, 0, 0, 0));
+      }
+      .bg-conic-bl-red {
+        background-image: conic-gradient(at bottom left, #f00, rgba(255, 0, 0, 0));
+      }
+      .bg-conic-l-red {
+        background-image: conic-gradient(at left, #f00, rgba(255, 0, 0, 0));
+      }
+      .bg-conic-tl-red {
+        background-image: conic-gradient(at top left, #f00, rgba(255, 0, 0, 0));
+      }
+    `);
+  });
+});
+
 test('directions and positions can be customized', () => {
   return generatePluginCss({
     theme: {
@@ -235,11 +301,23 @@ test('directions and positions can be customized', () => {
           'red': '#f00',
         },
       },
+      conicGradients: {
+        startingAngles: {
+          'default': '0deg',
+        },
+        positions: {
+          'almost-right': '90% center',
+        },
+        colors: {
+          'red': '#f00',
+        },
+      }
     },
     variants: {
       backgroundImage: [],
       linearGradients: [],
       radialGradients: [],
+      conicGradients: [],
     },
   }).then(css => {
     expect(css).toMatchCss(`
@@ -257,6 +335,9 @@ test('directions and positions can be customized', () => {
       }
       .bg-radial-off-center-red {
         background-image: radial-gradient(closest-side at 55% 60%, #f00, rgba(255, 0, 0, 0));
+      }
+      .bg-conic-almost-right-red {
+        background-image: conic-gradient(at 90% center, #f00, rgba(255, 0, 0, 0));
       }
     `);
   });
@@ -279,8 +360,17 @@ test('gradients can have multiple colors', () => {
           'default': 'center',
         },
         colors: {
-          'red-green': ['#f00', '#0f0'],
-          'red-green-blue': ['#f00', '#0f0', '#00f'],
+          'green-yellow': ['#0f0', '#ff0'],
+          'green-yellow-blue': ['#0f0', '#ff0', '#00f'],
+        },
+      },
+      conicGradients: {
+        positions: {
+          'default': 'center',
+        },
+        colors: {
+          'blue-green': ['#0f0', '#f00'],
+          'blue-green-red': ['#0f0', '#f00', '#f00'],
         },
       },
     },
@@ -288,6 +378,7 @@ test('gradients can have multiple colors', () => {
       backgroundImage: [],
       linearGradients: [],
       radialGradients: [],
+      conicGradients: [],
     },
   }).then(css => {
     expect(css).toMatchCss(`
@@ -300,11 +391,17 @@ test('gradients can have multiple colors', () => {
       .bg-gradient-to-bottom-red-green-blue {
         background-image: linear-gradient(#f00, #0f0, #00f);
       }
-      .bg-radial-red-green {
-        background-image: radial-gradient(closest-side, #f00, #0f0);
+      .bg-radial-green-yellow {
+        background-image: radial-gradient(closest-side, #0f0, #ff0);
       }
-      .bg-radial-red-green-blue {
-        background-image: radial-gradient(closest-side, #f00, #0f0, #00f);
+      .bg-radial-green-yellow-blue {
+        background-image: radial-gradient(closest-side, #0f0, #ff0, #00f);
+      }
+      .bg-conic-blue-green {
+        background-image: conic-gradient(#0f0, #f00);
+      }
+      .bg-conic-blue-green-red {
+        background-image: conic-gradient(#0f0, #f00, #f00);
       }
     `);
   });
@@ -329,8 +426,18 @@ test('multiple directions/positions and multiple colors can be used together', (
           'bottom': 'bottom',
         },
         colors: {
-          'red': ['#f00'],
           'green': ['#0f0'],
+          'blue': ['#00f'],
+        },
+      },
+      conicGradients: {
+        positions: {
+          'left': 'left',
+          'right': 'right',
+        },
+        colors: {
+          'blue': ['#00f'],
+          'yellow': ['#ff0'],
         },
       },
     },
@@ -338,6 +445,7 @@ test('multiple directions/positions and multiple colors can be used together', (
       backgroundImage: [],
       linearGradients: [],
       radialGradients: [],
+      conicGradients: [],
     },
   }).then(css => {
     expect(css).toMatchCss(`
@@ -356,17 +464,29 @@ test('multiple directions/positions and multiple colors can be used together', (
       .bg-gradient-to-bottom-green {
         background-image: linear-gradient(rgba(0, 255, 0, 0), #0f0);
       }
-      .bg-radial-top-red {
-        background-image: radial-gradient(closest-side at top, #f00, rgba(255, 0, 0, 0));
-      }
-      .bg-radial-bottom-red {
-        background-image: radial-gradient(closest-side at bottom, #f00, rgba(255, 0, 0, 0));
-      }
       .bg-radial-top-green {
         background-image: radial-gradient(closest-side at top, #0f0, rgba(0, 255, 0, 0));
       }
       .bg-radial-bottom-green {
         background-image: radial-gradient(closest-side at bottom, #0f0, rgba(0, 255, 0, 0));
+      }
+      .bg-radial-top-blue {
+        background-image: radial-gradient(closest-side at top, #00f, rgba(0, 0, 255, 0));
+      }
+      .bg-radial-bottom-blue {
+        background-image: radial-gradient(closest-side at bottom, #00f, rgba(0, 0, 255, 0));
+      }
+      .bg-conic-left-blue {
+        background-image: conic-gradient(at left, #00f, rgba(0, 0, 255, 0));
+      }
+      .bg-conic-right-blue {
+        background-image: conic-gradient(at right, #00f, rgba(0, 0, 255, 0));
+      }
+      .bg-conic-left-yellow {
+        background-image: conic-gradient(at left, #ff0, rgba(255, 255, 0, 0));
+      }
+      .bg-conic-right-yellow {
+        background-image: conic-gradient(at right, #ff0, rgba(255, 255, 0, 0));
       }
     `);
   });
@@ -385,11 +505,27 @@ test('colors can be referenced from the theme with a closure', () => {
         },
         colors: theme('colors'),
       }),
+      radialGradients: theme => ({
+        sizes: {
+          'default': 'farthest-corner',
+        },
+        positions: {
+          'b': 'bottom',
+        },
+        colors: theme('colors'),
+      }),
+      conicGradients: theme => ({
+        positions: {
+          'default': 'center',
+        },
+        colors: theme('colors'),
+      }),
     },
     variants: {
       backgroundImage: [],
       linearGradients: [],
       radialGradients: [],
+      conicGradients: [],
     },
   }).then(css => {
     expect(css).toMatchCss(`
@@ -401,6 +537,18 @@ test('colors can be referenced from the theme with a closure', () => {
       }
       .bg-gradient-b-blue {
         background-image: linear-gradient(rgba(0, 0, 255, 0), #00f);
+      }
+      .bg-radial-b-red {
+        background-image: radial-gradient(at bottom, #f00, rgba(255, 0, 0, 0));
+      }
+      .bg-radial-b-blue {
+        background-image: radial-gradient(at bottom, #00f, rgba(0, 0, 255, 0));
+      }
+      .bg-conic-red {
+        background-image: conic-gradient(#f00, rgba(255, 0, 0, 0));
+      }
+      .bg-conic-blue {
+        background-image: conic-gradient(#00f, rgba(0, 0, 255, 0));
       }
     `);
   });
@@ -427,11 +575,18 @@ test('color keywords are accepted', () => {
         },
         colors: theme('colors'),
       }),
+      conicGradients: theme => ({
+        positions: {
+          'b': 'bottom',
+        },
+        colors: theme('colors'),
+      }),
     },
     variants: {
       backgroundImage: [],
       linearGradients: [],
       radialGradients: [],
+      conicGradients: [],
     },
   }).then(css => {
     expect(css).toMatchCss(`
@@ -462,11 +617,23 @@ test('color keywords are accepted', () => {
       .bg-radial-t-current {
         background-image: radial-gradient(closest-side at top, currentColor, transparent);
       }
+      .bg-conic-b-white {
+        background-image: conic-gradient(at bottom, white, rgba(255, 255, 255, 0));
+      }
+      .bg-conic-b-black {
+        background-image: conic-gradient(at bottom, black, rgba(0, 0, 0, 0));
+      }
+      .bg-conic-b-transparent {
+        background-image: conic-gradient(at bottom, transparent, rgba(0, 0, 0, 0));
+      }
+      .bg-conic-b-current {
+        background-image: conic-gradient(at bottom, currentColor, transparent);
+      }
     `);
   });
 });
 
-test('some keywords such as inherit are skipped', () => {
+test('some keywords such as "inherit" are skipped', () => {
   return generatePluginCss({
     theme: {
       colors: {
@@ -488,11 +655,18 @@ test('some keywords such as inherit are skipped', () => {
         },
         colors: theme('colors'),
       }),
+      conicGradients: theme => ({
+        positions: {
+          'b': 'bottom',
+        },
+        colors: theme('colors'),
+      }),
     },
     variants: {
       backgroundImage: [],
       linearGradients: [],
       radialGradients: [],
+      conicGradients: [],
     },
   }).then(css => {
     expect(css).toMatchCss(`
@@ -504,6 +678,9 @@ test('some keywords such as inherit are skipped', () => {
       }
       .bg-radial-t-red {
         background-image: radial-gradient(closest-side at top, #f00, rgba(255, 0, 0, 0));
+      }
+      .bg-conic-b-red {
+        background-image: conic-gradient(at bottom, #f00, rgba(255, 0, 0, 0));
       }
     `);
   });
@@ -593,6 +770,49 @@ test('radial gradient shapes and sizes can be customized', () => {
   });
 });
 
+test('conic gradient starting angles can be customized', () => {
+  return generatePluginCss({
+    theme: {
+      colors: {
+        'red': '#f00',
+        'green-blue': ['#0f0', '#00f'],
+      },
+      conicGradients: theme => ({
+        startingAngles: {
+          'default': '90deg',
+          'reverse': '0.5turn',
+        },
+        positions: {
+          'default': 'center',
+        },
+        colors: theme('colors'),
+      }),
+    },
+    variants: {
+      backgroundImage: [],
+      conicGradients: [],
+    },
+  }).then(css => {
+    expect(css).toMatchCss(`
+      .bg-none {
+        background-image: none;
+      }
+      .bg-conic-red {
+        background-image: conic-gradient(from 90deg, #f00, rgba(255, 0, 0, 0));
+      }
+      .bg-conic-reverse-red {
+        background-image: conic-gradient(from 0.5turn, #f00, rgba(255, 0, 0, 0));
+      }
+      .bg-conic-green-blue {
+        background-image: conic-gradient(from 90deg, #0f0, #00f);
+      }
+      .bg-conic-reverse-green-blue {
+        background-image: conic-gradient(from 0.5turn, #0f0, #00f);
+      }
+    `);
+  });
+});
+
 test('there is no output for repeating gradients without lengths', () => {
   return generatePluginCss({
     theme: {
@@ -609,11 +829,15 @@ test('there is no output for repeating gradients without lengths', () => {
       repeatingRadialGradients: theme => ({
         colors: theme('colors'),
       }),
+      repeatingConicGradients: theme => ({
+        colors: theme('colors'),
+      }),
     },
     variants: {
       backgroundImage: [],
       repeatingLinearGradients: [],
       repeatingRadialGradients: [],
+      repeatingConicGradients: [],
     },
   }).then(css => {
     expect(css).toMatchCss(`
@@ -653,11 +877,23 @@ test('lengths can be customized', () => {
           'lg': '30px',
         },
       }),
+      repeatingConicGradients: theme => ({
+        positions: {
+          'default': 'center',
+        },
+        colors: theme('colors'),
+        lengths: {
+          'sm': '10deg',
+          'md': '20deg',
+          'lg': '40deg',
+        },
+      }),
     },
     variants: {
       backgroundImage: [],
       repeatingLinearGradients: [],
       repeatingRadialGradients: [],
+      repeatingConicGradients: [],
     },
   }).then(css => {
     expect(css).toMatchCss(`
@@ -700,6 +936,24 @@ test('lengths can be customized', () => {
       .bg-radial-blue-lg {
         background-image: repeating-radial-gradient(#00f, rgba(0, 0, 255, 0) 30px);
       }
+      .bg-conic-red-sm {
+        background-image: repeating-conic-gradient(#f00, rgba(255, 0, 0, 0) 10deg);
+      }
+      .bg-conic-blue-sm {
+        background-image: repeating-conic-gradient(#00f, rgba(0, 0, 255, 0) 10deg);
+      }
+      .bg-conic-red-md {
+        background-image: repeating-conic-gradient(#f00, rgba(255, 0, 0, 0) 20deg);
+      }
+      .bg-conic-blue-md {
+        background-image: repeating-conic-gradient(#00f, rgba(0, 0, 255, 0) 20deg);
+      }
+      .bg-conic-red-lg {
+        background-image: repeating-conic-gradient(#f00, rgba(255, 0, 0, 0) 40deg);
+      }
+      .bg-conic-blue-lg {
+        background-image: repeating-conic-gradient(#00f, rgba(0, 0, 255, 0) 40deg);
+      }
     `);
   });
 });
@@ -723,6 +977,14 @@ test('color stops can be customized', () => {
           'custom': ['#000', '#000 45%', '#fff 55%', '#fff'],
         },
       },
+      conicGradients: {
+        positions: {
+          'default': 'center',
+        },
+        colors: {
+          'checkerboard': ['white 90deg', 'black 90deg 180deg', 'white 180deg 270deg', 'black 270deg'],
+        },
+      },
       repeatingLinearGradients: theme => ({
         directions: theme('linearGradients.directions'),
         colors: {
@@ -741,13 +1003,24 @@ test('color stops can be customized', () => {
           'repeating': '',
         },
       }),
+      repeatingConicGradients: theme => ({
+        positions: theme('conicGradients.positions'),
+        colors: {
+          'starburst': ['white 0 5deg', 'blue 5deg 10deg'],
+        },
+        lengths: {
+          'repeating': '',
+        },
+      }),
     },
     variants: {
       backgroundImage: [],
       linearGradients: [],
       radialGradients: [],
+      conicGradients: [],
       repeatingLinearGradients: [],
       repeatingRadialGradients: [],
+      repeatingConicGradients: [],
     },
   }).then(css => {
     expect(css).toMatchCss(`
@@ -760,11 +1033,17 @@ test('color stops can be customized', () => {
       .bg-radial-custom {
         background-image: radial-gradient(closest-side, #000, #000 45%, #fff 55%, #fff);
       }
+      .bg-conic-checkerboard {
+        background-image: conic-gradient(white 90deg, black 90deg 180deg, white 180deg 270deg, black 270deg);
+      }
       .bg-gradient-r-custom-repeating {
         background-image: repeating-linear-gradient(to right, #000, #000 10px, #fff 10px, #fff 20px);
       }
       .bg-radial-custom-repeating {
         background-image: repeating-radial-gradient(#000, #000 10px, #fff 10px, #fff 20px);
+      }
+      .bg-conic-starburst-repeating {
+        background-image: repeating-conic-gradient(white 0 5deg, blue 5deg 10deg);
       }
     `);
   });
@@ -786,7 +1065,15 @@ test('responsive variants are generated by default', () => {
           'default': 'center',
         },
         colors: {
-          'red': '#f00',
+          'green': '#0f0',
+        },
+      },
+      conicGradients: {
+        positions: {
+          'default': 'center',
+        },
+        colors: {
+          'blue': '#00f',
         },
       },
       repeatingLinearGradients: theme => ({
@@ -803,6 +1090,13 @@ test('responsive variants are generated by default', () => {
           'repeating': '10px',
         },
       }),
+      repeatingConicGradients: theme => ({
+        positions: theme('conicGradients.positions'),
+        colors: theme('conicGradients.colors'),
+        lengths: {
+          'repeating': '10deg',
+        },
+      }),
     },
   }).then(css => {
     expect(css).toMatchCss(`
@@ -812,14 +1106,20 @@ test('responsive variants are generated by default', () => {
       .bg-gradient-t-red {
         background-image: linear-gradient(to top, rgba(255, 0, 0, 0), #f00);
       }
-      .bg-radial-red {
-        background-image: radial-gradient(closest-side, #f00, rgba(255, 0, 0, 0));
+      .bg-radial-green {
+        background-image: radial-gradient(closest-side, #0f0, rgba(0, 255, 0, 0));
+      }
+      .bg-conic-blue {
+        background-image: conic-gradient(#00f, rgba(0, 0, 255, 0));
       }
       .bg-gradient-t-red-repeating {
         background-image: repeating-linear-gradient(to top, rgba(255, 0, 0, 0), #f00 20px);
       }
-      .bg-radial-red-repeating {
-        background-image: repeating-radial-gradient(#f00, rgba(255, 0, 0, 0) 10px);
+      .bg-radial-green-repeating {
+        background-image: repeating-radial-gradient(#0f0, rgba(0, 255, 0, 0) 10px);
+      }
+      .bg-conic-blue-repeating {
+        background-image: repeating-conic-gradient(#00f, rgba(0, 0, 255, 0) 10deg);
       }
       @media (min-width: 640px) {
         .sm\\:bg-none {
@@ -828,14 +1128,20 @@ test('responsive variants are generated by default', () => {
         .sm\\:bg-gradient-t-red {
           background-image: linear-gradient(to top, rgba(255, 0, 0, 0), #f00);
         }
-        .sm\\:bg-radial-red {
-          background-image: radial-gradient(closest-side, #f00, rgba(255, 0, 0, 0));
+        .sm\\:bg-radial-green {
+          background-image: radial-gradient(closest-side, #0f0, rgba(0, 255, 0, 0));
+        }
+        .sm\\:bg-conic-blue {
+          background-image: conic-gradient(#00f, rgba(0, 0, 255, 0));
         }
         .sm\\:bg-gradient-t-red-repeating {
           background-image: repeating-linear-gradient(to top, rgba(255, 0, 0, 0), #f00 20px);
         }
-        .sm\\:bg-radial-red-repeating {
-          background-image: repeating-radial-gradient(#f00, rgba(255, 0, 0, 0) 10px);
+        .sm\\:bg-radial-green-repeating {
+          background-image: repeating-radial-gradient(#0f0, rgba(0, 255, 0, 0) 10px);
+        }
+        .sm\\:bg-conic-blue-repeating {
+          background-image: repeating-conic-gradient(#00f, rgba(0, 0, 255, 0) 10deg);
         }
       }
     `);
@@ -854,6 +1160,14 @@ test('variants can be customized', () => {
         },
       },
       radialGradients: {
+        positions: {
+          't': 'top',
+        },
+        colors: {
+          'green': '#0f0',
+        },
+      },
+      conicGradients: {
         positions: {
           'b': 'bottom',
         },
@@ -875,13 +1189,22 @@ test('variants can be customized', () => {
           'repeating': '10px',
         },
       }),
+      repeatingConicGradients: theme => ({
+        positions: theme('conicGradients.positions'),
+        colors: theme('conicGradients.colors'),
+        lengths: {
+          'repeating': '10deg',
+        },
+      }),
     },
     variants: {
       backgroundImage: ['focus'],
       linearGradients: ['hover', 'active'],
       radialGradients: ['group-hover'],
+      conicGradients: ['hover'],
       repeatingLinearGradients: ['active'],
-      repeatingRadialGradients: ['hover'],
+      repeatingRadialGradients: [],
+      repeatingConicGradients: ['hover', 'responsive'],
     },
   }).then(css => {
     expect(css).toMatchCss(`
@@ -900,11 +1223,17 @@ test('variants can be customized', () => {
       .active\\:bg-gradient-t-red:active {
         background-image: linear-gradient(to top, rgba(255, 0, 0, 0), #f00);
       }
-      .bg-radial-b-blue {
-        background-image: radial-gradient(closest-side at bottom, #00f, rgba(0, 0, 255, 0));
+      .bg-radial-t-green {
+        background-image: radial-gradient(closest-side at top, #0f0, rgba(0, 255, 0, 0));
       }
-      .group:hover .group-hover\\:bg-radial-b-blue {
-        background-image: radial-gradient(closest-side at bottom, #00f, rgba(0, 0, 255, 0));
+      .group:hover .group-hover\\:bg-radial-t-green {
+        background-image: radial-gradient(closest-side at top, #0f0, rgba(0, 255, 0, 0));
+      }
+      .bg-conic-b-blue {
+        background-image: conic-gradient(at bottom, #00f, rgba(0, 0, 255, 0));
+      }
+      .hover\\:bg-conic-b-blue:hover {
+        background-image: conic-gradient(at bottom, #00f, rgba(0, 0, 255, 0));
       }
       .bg-gradient-t-red-repeating {
         background-image: repeating-linear-gradient(to top, rgba(255, 0, 0, 0), #f00 20px);
@@ -912,11 +1241,22 @@ test('variants can be customized', () => {
       .active\\:bg-gradient-t-red-repeating:active {
         background-image: repeating-linear-gradient(to top, rgba(255, 0, 0, 0), #f00 20px);
       }
-      .bg-radial-b-blue-repeating {
-        background-image: repeating-radial-gradient(at bottom, #00f, rgba(0, 0, 255, 0) 10px);
+      .bg-radial-t-green-repeating {
+        background-image: repeating-radial-gradient(at top, #0f0, rgba(0, 255, 0, 0) 10px);
       }
-      .hover\\:bg-radial-b-blue-repeating:hover {
-        background-image: repeating-radial-gradient(at bottom, #00f, rgba(0, 0, 255, 0) 10px);
+      .bg-conic-b-blue-repeating {
+        background-image: repeating-conic-gradient(at bottom, #00f, rgba(0, 0, 255, 0) 10deg);
+      }
+      .hover\\:bg-conic-b-blue-repeating:hover {
+        background-image: repeating-conic-gradient(at bottom, #00f, rgba(0, 0, 255, 0) 10deg);
+      }
+      @media (min-width: 640px) {
+        .sm\\:bg-conic-b-blue-repeating {
+          background-image: repeating-conic-gradient(at bottom, #00f, rgba(0, 0, 255, 0) 10deg);
+        }
+        .sm\\:hover\\:bg-conic-b-blue-repeating:hover {
+          background-image: repeating-conic-gradient(at bottom, #00f, rgba(0, 0, 255, 0) 10deg);
+        }
       }
     `);
   });

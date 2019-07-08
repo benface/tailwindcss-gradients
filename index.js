@@ -55,8 +55,24 @@ module.exports = function() {
     };
     const defaultRadialGradientColors = {};
     const defaultRadialGradientVariants = ['responsive'];
+    const defaultConicGradientStartingAngles = {
+      'default': '0',
+    };
+    const defaultConicGradientPositions = {
+      'default': 'center',
+      't': 'top',
+      'tr': 'top right',
+      'r': 'right',
+      'br': 'bottom right',
+      'b': 'bottom',
+      'bl': 'bottom left',
+      'l': 'left',
+      'tl': 'top left',
+    };
+    const defaultConicGradientColors = {};
+    const defaultConicGradientVariants = ['responsive'];
     const defaultRepeatingLinearGradientDirections = defaultLinearGradientDirections;
-    const defaultRepeatingLinearGradientColors = defaultLinearGradientColors;
+    const defaultRepeatingLinearGradientColors = {};
     const defaultRepeatingLinearGradientLengths = {};
     const defaultRepeatingLinearGradientVariants = ['responsive'];
     const defaultRepeatingRadialGradientShapes = defaultRadialGradientShapes;
@@ -64,9 +80,14 @@ module.exports = function() {
       'default': 'farthest-corner',
     };
     const defaultRepeatingRadialGradientPositions = defaultRadialGradientPositions;
-    const defaultRepeatingRadialGradientColors = defaultRadialGradientColors;
+    const defaultRepeatingRadialGradientColors = {};
     const defaultRepeatingRadialGradientLengths = {};
     const defaultRepeatingRadialGradientVariants = ['responsive'];
+    const defaultRepeatingConicGradientStartingAngles = defaultConicGradientStartingAngles;
+    const defaultRepeatingConicGradientPositions = defaultConicGradientPositions;
+    const defaultRepeatingConicGradientColors = {};
+    const defaultRepeatingConicGradientLengths = {};
+    const defaultRepeatingConicGradientVariants = ['responsive'];
 
     const backgroundImageVariants = variants('backgroundImage', defaultBackgroundImageVariants);
     const linearGradientDirections = theme('linearGradients.directions', defaultLinearGradientDirections);
@@ -77,6 +98,10 @@ module.exports = function() {
     const radialGradientPositions = theme('radialGradients.positions', defaultRadialGradientPositions);
     const radialGradientColors = theme('radialGradients.colors', defaultRadialGradientColors);
     const radialGradientVariants = variants('radialGradients', defaultRadialGradientVariants);
+    const conicGradientStartingAngles = theme('conicGradients.startingAngles', defaultConicGradientStartingAngles);
+    const conicGradientPositions = theme('conicGradients.positions', defaultConicGradientPositions);
+    const conicGradientColors = theme('conicGradients.colors', defaultConicGradientColors);
+    const conicGradientVariants = variants('conicGradients', defaultConicGradientVariants);
     const repeatingLinearGradientDirections = theme('repeatingLinearGradients.directions', defaultRepeatingLinearGradientDirections);
     const repeatingLinearGradientColors = theme('repeatingLinearGradients.colors', defaultRepeatingLinearGradientColors);
     const repeatingLinearGradientLengths = theme('repeatingLinearGradients.lengths', defaultRepeatingLinearGradientLengths);
@@ -87,6 +112,11 @@ module.exports = function() {
     const repeatingRadialGradientColors = theme('repeatingRadialGradients.colors', defaultRepeatingRadialGradientColors);
     const repeatingRadialGradientLengths = theme('repeatingRadialGradients.lengths', defaultRepeatingRadialGradientLengths);
     const repeatingRadialGradientVariants = variants('repeatingRadialGradients', defaultRepeatingRadialGradientVariants);
+    const repeatingConicGradientStartingAngles = theme('repeatingConicGradients.startingAngles', defaultRepeatingConicGradientStartingAngles);
+    const repeatingConicGradientPositions = theme('repeatingConicGradients.positions', defaultRepeatingConicGradientPositions);
+    const repeatingConicGradientColors = theme('repeatingConicGradients.colors', defaultRepeatingConicGradientColors);
+    const repeatingConicGradientLengths = theme('repeatingConicGradients.lengths', defaultRepeatingConicGradientLengths);
+    const repeatingConicGradientVariants = variants('repeatingConicGradients', defaultRepeatingConicGradientVariants);
 
     const linearGradientSelector = function(directionKey, colorKey, lengthKey) {
       return `.${e(`bg-gradient-${directionKey}-${colorKey}${lengthKey ? `-${lengthKey}` : ''}`)}`;
@@ -105,7 +135,7 @@ module.exports = function() {
       const cssDefaultRadialGradientShape = 'ellipse';
       const cssDefaultRadialGradientSize = 'farthest-corner';
       const cssDefaultRadialGradientPositions = ['center', 'center center', '50%', '50% 50%', 'center 50%', '50% center'];
-      let firstArgumentValues = [];
+      const firstArgumentValues = [];
       if (shape !== cssDefaultRadialGradientShape) {
         firstArgumentValues.push(shape);
       }
@@ -118,6 +148,23 @@ module.exports = function() {
       return `${!_.isNil(length) ? 'repeating-' : ''}radial-gradient(${firstArgumentValues.length > 0 ? `${firstArgumentValues.join(' ')}, ` : ''}${colors.join(', ')}${length ? ` ${length}` : ''})`;
     };
 
+    const conicGradientSelector = function(startingAngleKey, positionKey, colorKey, lengthKey) {
+      return `.${e(`bg-conic${startingAngleKey === 'default' ? '' : `-${startingAngleKey}`}${positionKey === 'default' ? '' : `-${positionKey}`}-${colorKey}${lengthKey ? `-${lengthKey}` : ''}`)}`;
+    };
+
+    const conicGradientValue = function(startingAngle, position, colors, length) {
+      const cssDefaultConicGradientStartingAngles = ['0', '0deg', '0%', '0turn', '0grad', '0rad'];
+      const cssDefaultConicGradientPositions = ['center', 'center center', '50%', '50% 50%', 'center 50%', '50% center'];
+      const firstArgumentValues = [];
+      if (!_.includes(cssDefaultConicGradientStartingAngles, startingAngle)) {
+        firstArgumentValues.push(`from ${startingAngle}`);
+      }
+      if (!_.includes(cssDefaultConicGradientPositions, position)) {
+        firstArgumentValues.push(`at ${position}`);
+      }
+      return `${!_.isNil(length) ? 'repeating-' : ''}conic-gradient(${firstArgumentValues.length > 0 ? `${firstArgumentValues.join(' ')}, ` : ''}${colors.join(', ')}${length ? ` ${length}` : ''})`;
+    };
+
     const backgroundImageUtilities = {
       '.bg-none': {
         backgroundImage: 'none',
@@ -125,7 +172,7 @@ module.exports = function() {
     };
 
     const linearGradientUtilities = (function() {
-      let utilities = {};
+      const utilities = {};
       _.forEach(linearGradientColors, (colors, colorKey) => {
         colors = normalizeColors(colors, true);
         if (!colors) {
@@ -141,7 +188,7 @@ module.exports = function() {
     })();
 
     const radialGradientUtilities = (function() {
-      let utilities = {};
+      const utilities = {};
       _.forEach(radialGradientColors, (colors, colorKey) => {
         colors = normalizeColors(colors, false);
         if (!colors) {
@@ -160,8 +207,26 @@ module.exports = function() {
       return utilities;
     })();
 
+    const conicGradientUtilities = (function() {
+      const utilities = {};
+      _.forEach(conicGradientColors, (colors, colorKey) => {
+        colors = normalizeColors(colors, false);
+        if (!colors) {
+          return; // continue
+        }
+        _.forEach(conicGradientPositions, (position, positionKey) => {
+          _.forEach(conicGradientStartingAngles, (startingAngle, startingAngleKey) => {
+            utilities[conicGradientSelector(startingAngleKey, positionKey, colorKey)] = {
+              backgroundImage: conicGradientValue(startingAngle, position, colors),
+            };
+          });
+        });
+      });
+      return utilities;
+    })();
+
     const repeatingLinearGradientUtilities = (function() {
-      let utilities = {};
+      const utilities = {};
       _.forEach(repeatingLinearGradientLengths, (length, lengthKey) => {
         _.forEach(repeatingLinearGradientColors, (colors, colorKey) => {
           colors = normalizeColors(colors, true);
@@ -179,7 +244,7 @@ module.exports = function() {
     })();
 
     const repeatingRadialGradientUtilities = (function() {
-      let utilities = {};
+      const utilities = {};
       _.forEach(repeatingRadialGradientLengths, (length, lengthKey) => {
         _.forEach(repeatingRadialGradientColors, (colors, colorKey) => {
           colors = normalizeColors(colors, false);
@@ -200,10 +265,32 @@ module.exports = function() {
       return utilities;
     })();
 
+    const repeatingConicGradientUtilities = (function() {
+      const utilities = {};
+      _.forEach(repeatingConicGradientLengths, (length, lengthKey) => {
+        _.forEach(repeatingConicGradientColors, (colors, colorKey) => {
+          colors = normalizeColors(colors, false);
+          if (!colors) {
+            return; // continue
+          }
+          _.forEach(repeatingConicGradientPositions, (position, positionKey) => {
+            _.forEach(repeatingConicGradientStartingAngles, (startingAngle, startingAngleKey) => {
+              utilities[conicGradientSelector(startingAngleKey, positionKey, colorKey, lengthKey)] = {
+                backgroundImage: conicGradientValue(startingAngle, position, colors, length),
+              };
+            });
+          });
+        });
+      });
+      return utilities;
+    })();
+
     addUtilities(backgroundImageUtilities, backgroundImageVariants);
     addUtilities(linearGradientUtilities, linearGradientVariants);
     addUtilities(radialGradientUtilities, radialGradientVariants);
+    addUtilities(conicGradientUtilities, conicGradientVariants);
     addUtilities(repeatingLinearGradientUtilities, repeatingLinearGradientVariants);
     addUtilities(repeatingRadialGradientUtilities, repeatingRadialGradientVariants);
+    addUtilities(repeatingConicGradientUtilities, repeatingConicGradientVariants);
   };
 };
