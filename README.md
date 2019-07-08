@@ -23,6 +23,9 @@ npm install tailwindcss-gradients
     radialGradients: theme => ({
       colors: theme('colors'),
     }),
+    conicGradients: theme => ({
+      colors: theme('colors'),
+    }),
   },
   plugins: [
     require('tailwindcss-gradients')(),
