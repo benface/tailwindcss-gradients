@@ -1,6 +1,21 @@
 const _ = require('lodash');
 const Color = require('color');
 
+const flattenColorPalette = function(colors) {
+  return _(colors)
+    .flatMap((color, name) => {
+      if (!_.isPlainObject(color)) {
+        return [[name, color]];
+      }
+      return _.map(color, (value, key) => {
+        const suffix = key === 'default' ? '' : `-${key}`;
+        return [`${name}${suffix}`, value];
+      });
+    })
+    .fromPairs()
+    .value();
+};
+
 const normalizeColors = function(colors, transparentFirst = true) {
   colors = _.castArray(colors);
   const unsupportedColorKeywords = ['inherit', 'initial', 'unset', 'revert'];
@@ -173,7 +188,7 @@ module.exports = function() {
 
     const linearGradientUtilities = (function() {
       const utilities = {};
-      _.forEach(linearGradientColors, (colors, colorKey) => {
+      _.forEach(flattenColorPalette(linearGradientColors), (colors, colorKey) => {
         colors = normalizeColors(colors, true);
         if (!colors) {
           return; // continue
@@ -189,7 +204,7 @@ module.exports = function() {
 
     const radialGradientUtilities = (function() {
       const utilities = {};
-      _.forEach(radialGradientColors, (colors, colorKey) => {
+      _.forEach(flattenColorPalette(radialGradientColors), (colors, colorKey) => {
         colors = normalizeColors(colors, false);
         if (!colors) {
           return; // continue
@@ -209,7 +224,7 @@ module.exports = function() {
 
     const conicGradientUtilities = (function() {
       const utilities = {};
-      _.forEach(conicGradientColors, (colors, colorKey) => {
+      _.forEach(flattenColorPalette(conicGradientColors), (colors, colorKey) => {
         colors = normalizeColors(colors, false);
         if (!colors) {
           return; // continue
@@ -228,7 +243,7 @@ module.exports = function() {
     const repeatingLinearGradientUtilities = (function() {
       const utilities = {};
       _.forEach(repeatingLinearGradientLengths, (length, lengthKey) => {
-        _.forEach(repeatingLinearGradientColors, (colors, colorKey) => {
+        _.forEach(flattenColorPalette(repeatingLinearGradientColors), (colors, colorKey) => {
           colors = normalizeColors(colors, true);
           if (!colors) {
             return; // continue
@@ -246,7 +261,7 @@ module.exports = function() {
     const repeatingRadialGradientUtilities = (function() {
       const utilities = {};
       _.forEach(repeatingRadialGradientLengths, (length, lengthKey) => {
-        _.forEach(repeatingRadialGradientColors, (colors, colorKey) => {
+        _.forEach(flattenColorPalette(repeatingRadialGradientColors), (colors, colorKey) => {
           colors = normalizeColors(colors, false);
           if (!colors) {
             return; // continue
@@ -268,7 +283,7 @@ module.exports = function() {
     const repeatingConicGradientUtilities = (function() {
       const utilities = {};
       _.forEach(repeatingConicGradientLengths, (length, lengthKey) => {
-        _.forEach(repeatingConicGradientColors, (colors, colorKey) => {
+        _.forEach(flattenColorPalette(repeatingConicGradientColors), (colors, colorKey) => {
           colors = normalizeColors(colors, false);
           if (!colors) {
             return; // continue

@@ -554,6 +554,80 @@ test('colors can be referenced from the theme with a closure', () => {
   });
 });
 
+test('colors can use nested object notation', () => {
+  return generatePluginCss({
+    theme: {
+      colors: {
+        indigo: {
+          lighter: '#b3bcf5',
+          default: '#5c6ac4',
+          dark: '#202e78',
+        },
+      },
+      linearGradients: theme => ({
+        directions: {
+          't': 'to top',
+        },
+        colors: theme('colors'),
+      }),
+      radialGradients: theme => ({
+        sizes: {
+          'default': 'farthest-corner',
+        },
+        positions: {
+          'b': 'bottom',
+        },
+        colors: theme('colors'),
+      }),
+      conicGradients: theme => ({
+        positions: {
+          'default': 'center',
+        },
+        colors: theme('colors'),
+      }),
+    },
+    variants: {
+      backgroundImage: [],
+      linearGradients: [],
+      radialGradients: [],
+      conicGradients: [],
+    },
+  }).then(css => {
+    expect(css).toMatchCss(`
+      .bg-none {
+        background-image: none;
+      }
+      .bg-gradient-t-indigo-lighter {
+        background-image: linear-gradient(to top, rgba(179, 188, 245, 0), #b3bcf5);
+      }
+      .bg-gradient-t-indigo {
+        background-image: linear-gradient(to top, rgba(92, 106, 196, 0), #5c6ac4);
+      }
+      .bg-gradient-t-indigo-dark {
+        background-image: linear-gradient(to top, rgba(32, 46, 120, 0), #202e78);
+      }
+      .bg-radial-b-indigo-lighter {
+        background-image: radial-gradient(at bottom, #b3bcf5, rgba(179, 188, 245, 0));
+      }
+      .bg-radial-b-indigo {
+        background-image: radial-gradient(at bottom, #5c6ac4, rgba(92, 106, 196, 0));
+      }
+      .bg-radial-b-indigo-dark {
+        background-image: radial-gradient(at bottom, #202e78, rgba(32, 46, 120, 0));
+      }
+      .bg-conic-indigo-lighter {
+        background-image: conic-gradient(#b3bcf5, rgba(179, 188, 245, 0));
+      }
+      .bg-conic-indigo {
+        background-image: conic-gradient(#5c6ac4, rgba(92, 106, 196, 0));
+      }
+      .bg-conic-indigo-dark {
+        background-image: conic-gradient(#202e78, rgba(32, 46, 120, 0));
+      }
+    `);
+  });
+});
+
 test('color keywords are accepted', () => {
   return generatePluginCss({
     theme: {
