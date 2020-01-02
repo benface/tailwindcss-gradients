@@ -1,3 +1,4 @@
+const plugin = require('tailwindcss/plugin');
 const _ = require('lodash');
 const Color = require('color');
 
@@ -36,10 +37,184 @@ const normalizeColors = function(colors, transparentFirst = true) {
   return colors;
 };
 
-module.exports = function() {
-  return ({ theme, variants, e, addUtilities }) => {
-    const defaultBackgroundImageVariants = ['responsive'];
-    const defaultLinearGradientDirections = {
+module.exports = plugin(function({ theme, variants, e, addUtilities }) {
+  const linearGradientSelector = function(directionKey, colorKey, lengthKey) {
+    return `.${e(`bg-gradient-${directionKey}-${colorKey}${lengthKey ? `-${lengthKey}` : ''}`)}`;
+  };
+
+  const linearGradientValue = function(direction, colors, length) {
+    const cssDefaultLinearGradientDirections = ['to bottom', '180deg', '0.5turn', '200grad', '3.1416rad'];
+    return `${!_.isNil(length) ? 'repeating-' : ''}linear-gradient(${_.includes(cssDefaultLinearGradientDirections, direction) ? '' : `${direction}, `}${colors.join(', ')}${length ? ` ${length}` : ''})`;
+  };
+
+  const radialGradientSelector = function(shapeKey, sizeKey, positionKey, colorKey, lengthKey) {
+    return `.${e(`bg-radial${shapeKey === 'default' ? '' : `-${shapeKey}`}${sizeKey === 'default' ? '' : `-${sizeKey}`}${positionKey === 'default' ? '' : `-${positionKey}`}-${colorKey}${lengthKey ? `-${lengthKey}` : ''}`)}`;
+  };
+
+  const radialGradientValue = function(shape, size, position, colors, length) {
+    const cssDefaultRadialGradientShape = 'ellipse';
+    const cssDefaultRadialGradientSize = 'farthest-corner';
+    const cssDefaultRadialGradientPositions = ['center', 'center center', '50%', '50% 50%', 'center 50%', '50% center'];
+    const firstArgumentValues = [];
+    if (shape !== cssDefaultRadialGradientShape) {
+      firstArgumentValues.push(shape);
+    }
+    if (size !== cssDefaultRadialGradientSize) {
+      firstArgumentValues.push(size);
+    }
+    if (!_.includes(cssDefaultRadialGradientPositions, position)) {
+      firstArgumentValues.push(`at ${position}`);
+    }
+    return `${!_.isNil(length) ? 'repeating-' : ''}radial-gradient(${firstArgumentValues.length > 0 ? `${firstArgumentValues.join(' ')}, ` : ''}${colors.join(', ')}${length ? ` ${length}` : ''})`;
+  };
+
+  const conicGradientSelector = function(startingAngleKey, positionKey, colorKey, lengthKey) {
+    return `.${e(`bg-conic${startingAngleKey === 'default' ? '' : `-${startingAngleKey}`}${positionKey === 'default' ? '' : `-${positionKey}`}-${colorKey}${lengthKey ? `-${lengthKey}` : ''}`)}`;
+  };
+
+  const conicGradientValue = function(startingAngle, position, colors, length) {
+    const cssDefaultConicGradientStartingAngles = ['0', '0deg', '0%', '0turn', '0grad', '0rad'];
+    const cssDefaultConicGradientPositions = ['center', 'center center', '50%', '50% 50%', 'center 50%', '50% center'];
+    const firstArgumentValues = [];
+    if (!_.includes(cssDefaultConicGradientStartingAngles, startingAngle)) {
+      firstArgumentValues.push(`from ${startingAngle}`);
+    }
+    if (!_.includes(cssDefaultConicGradientPositions, position)) {
+      firstArgumentValues.push(`at ${position}`);
+    }
+    return `${!_.isNil(length) ? 'repeating-' : ''}conic-gradient(${firstArgumentValues.length > 0 ? `${firstArgumentValues.join(' ')}, ` : ''}${colors.join(', ')}${length ? ` ${length}` : ''})`;
+  };
+
+  const backgroundImageUtilities = {
+    '.bg-none': {
+      backgroundImage: 'none',
+    },
+  };
+
+  const linearGradientUtilities = (function() {
+    const utilities = {};
+    _.forEach(flattenColorPalette(theme('linearGradientColors')), (colors, colorKey) => {
+      colors = normalizeColors(colors, true);
+      if (!colors) {
+        return; // continue
+      }
+      _.forEach(theme('linearGradientDirections'), (direction, directionKey) => {
+        utilities[linearGradientSelector(directionKey, colorKey)] = {
+          backgroundImage: linearGradientValue(direction, colors),
+        };
+      });
+    });
+    return utilities;
+  })();
+
+  const radialGradientUtilities = (function() {
+    const utilities = {};
+    _.forEach(flattenColorPalette(theme('radialGradientColors')), (colors, colorKey) => {
+      colors = normalizeColors(colors, false);
+      if (!colors) {
+        return; // continue
+      }
+      _.forEach(theme('radialGradientPositions'), (position, positionKey) => {
+        _.forEach(theme('radialGradientSizes'), (size, sizeKey) => {
+          _.forEach(theme('radialGradientShapes'), (shape, shapeKey) => {
+            utilities[radialGradientSelector(shapeKey, sizeKey, positionKey, colorKey)] = {
+              backgroundImage: radialGradientValue(shape, size, position, colors),
+            };
+          });
+        });
+      });
+    });
+    return utilities;
+  })();
+
+  const conicGradientUtilities = (function() {
+    const utilities = {};
+    _.forEach(flattenColorPalette(theme('conicGradientColors')), (colors, colorKey) => {
+      colors = normalizeColors(colors, false);
+      if (!colors) {
+        return; // continue
+      }
+      _.forEach(theme('conicGradientPositions'), (position, positionKey) => {
+        _.forEach(theme('conicGradientStartingAngles'), (startingAngle, startingAngleKey) => {
+          utilities[conicGradientSelector(startingAngleKey, positionKey, colorKey)] = {
+            backgroundImage: conicGradientValue(startingAngle, position, colors),
+          };
+        });
+      });
+    });
+    return utilities;
+  })();
+
+  const repeatingLinearGradientUtilities = (function() {
+    const utilities = {};
+    _.forEach(theme('repeatingLinearGradientLengths'), (length, lengthKey) => {
+      _.forEach(flattenColorPalette(theme('repeatingLinearGradientColors')), (colors, colorKey) => {
+        colors = normalizeColors(colors, true);
+        if (!colors) {
+          return; // continue
+        }
+        _.forEach(theme('repeatingLinearGradientDirections'), (direction, directionKey) => {
+          utilities[linearGradientSelector(directionKey, colorKey, lengthKey)] = {
+            backgroundImage: linearGradientValue(direction, colors, length),
+          };
+        });
+      });
+    });
+    return utilities;
+  })();
+
+  const repeatingRadialGradientUtilities = (function() {
+    const utilities = {};
+    _.forEach(theme('repeatingRadialGradientLengths'), (length, lengthKey) => {
+      _.forEach(flattenColorPalette(theme('repeatingRadialGradientColors')), (colors, colorKey) => {
+        colors = normalizeColors(colors, false);
+        if (!colors) {
+          return; // continue
+        }
+        _.forEach(theme('repeatingRadialGradientPositions'), (position, positionKey) => {
+          _.forEach(theme('repeatingRadialGradientSizes'), (size, sizeKey) => {
+            _.forEach(theme('repeatingRadialGradientShapes'), (shape, shapeKey) => {
+              utilities[radialGradientSelector(shapeKey, sizeKey, positionKey, colorKey, lengthKey)] = {
+                backgroundImage: radialGradientValue(shape, size, position, colors, length),
+              };
+            });
+          });
+        });
+      });
+    });
+    return utilities;
+  })();
+
+  const repeatingConicGradientUtilities = (function() {
+    const utilities = {};
+    _.forEach(theme('repeatingConicGradientLengths'), (length, lengthKey) => {
+      _.forEach(flattenColorPalette(theme('repeatingConicGradientColors')), (colors, colorKey) => {
+        colors = normalizeColors(colors, false);
+        if (!colors) {
+          return; // continue
+        }
+        _.forEach(theme('repeatingConicGradientPositions'), (position, positionKey) => {
+          _.forEach(theme('repeatingConicGradientStartingAngles'), (startingAngle, startingAngleKey) => {
+            utilities[conicGradientSelector(startingAngleKey, positionKey, colorKey, lengthKey)] = {
+              backgroundImage: conicGradientValue(startingAngle, position, colors, length),
+            };
+          });
+        });
+      });
+    });
+    return utilities;
+  })();
+
+  addUtilities(backgroundImageUtilities, variants('backgroundImage'));
+  addUtilities(linearGradientUtilities, variants('linearGradients'));
+  addUtilities(radialGradientUtilities, variants('radialGradients'));
+  addUtilities(conicGradientUtilities, variants('conicGradients'));
+  addUtilities(repeatingLinearGradientUtilities, variants('repeatingLinearGradients'));
+  addUtilities(repeatingRadialGradientUtilities, variants('repeatingRadialGradients'));
+  addUtilities(repeatingConicGradientUtilities, variants('repeatingConicGradients'));
+}, {
+  theme: {
+    linearGradientDirections: {
       't': 'to top',
       'tr': 'to top right',
       'r': 'to right',
@@ -48,16 +223,15 @@ module.exports = function() {
       'bl': 'to bottom left',
       'l': 'to left',
       'tl': 'to top left',
-    };
-    const defaultLinearGradientColors = {};
-    const defaultLinearGradientVariants = ['responsive'];
-    const defaultRadialGradientShapes = {
+    },
+    linearGradientColors: {},
+    radialGradientShapes: {
       'default': 'ellipse',
-    };
-    const defaultRadialGradientSizes = {
+    },
+    radialGradientSizes: {
       'default': 'closest-side',
-    };
-    const defaultRadialGradientPositions = {
+    },
+    radialGradientPositions: {
       'default': 'center',
       't': 'top',
       'tr': 'top right',
@@ -67,13 +241,12 @@ module.exports = function() {
       'bl': 'bottom left',
       'l': 'left',
       'tl': 'top left',
-    };
-    const defaultRadialGradientColors = {};
-    const defaultRadialGradientVariants = ['responsive'];
-    const defaultConicGradientStartingAngles = {
+    },
+    radialGradientColors: {},
+    conicGradientStartingAngles: {
       'default': '0',
-    };
-    const defaultConicGradientPositions = {
+    },
+    conicGradientPositions: {
       'default': 'center',
       't': 'top',
       'tr': 'top right',
@@ -83,229 +256,30 @@ module.exports = function() {
       'bl': 'bottom left',
       'l': 'left',
       'tl': 'top left',
-    };
-    const defaultConicGradientColors = {};
-    const defaultConicGradientVariants = ['responsive'];
-    const defaultRepeatingLinearGradientDirections = defaultLinearGradientDirections;
-    const defaultRepeatingLinearGradientColors = {};
-    const defaultRepeatingLinearGradientLengths = {};
-    const defaultRepeatingLinearGradientVariants = ['responsive'];
-    const defaultRepeatingRadialGradientShapes = defaultRadialGradientShapes;
-    const defaultRepeatingRadialGradientSizes = {
+    },
+    conicGradientColors: {},
+    repeatingLinearGradientDirections: theme => theme('linearGradientDirections'),
+    repeatingLinearGradientColors: {},
+    repeatingLinearGradientLengths: {},
+    repeatingRadialGradientShapes: theme => theme('radialGradientShapes'),
+    repeatingRadialGradientSizes: {
       'default': 'farthest-corner',
-    };
-    const defaultRepeatingRadialGradientPositions = defaultRadialGradientPositions;
-    const defaultRepeatingRadialGradientColors = {};
-    const defaultRepeatingRadialGradientLengths = {};
-    const defaultRepeatingRadialGradientVariants = ['responsive'];
-    const defaultRepeatingConicGradientStartingAngles = defaultConicGradientStartingAngles;
-    const defaultRepeatingConicGradientPositions = defaultConicGradientPositions;
-    const defaultRepeatingConicGradientColors = {};
-    const defaultRepeatingConicGradientLengths = {};
-    const defaultRepeatingConicGradientVariants = ['responsive'];
-
-    const backgroundImageVariants = variants('backgroundImage', defaultBackgroundImageVariants);
-    const linearGradientDirections = theme('linearGradients.directions', defaultLinearGradientDirections);
-    const linearGradientColors = theme('linearGradients.colors', defaultLinearGradientColors);
-    const linearGradientVariants = variants('linearGradients', defaultLinearGradientVariants);
-    const radialGradientShapes = theme('radialGradients.shapes', defaultRadialGradientShapes);
-    const radialGradientSizes = theme('radialGradients.sizes', defaultRadialGradientSizes);
-    const radialGradientPositions = theme('radialGradients.positions', defaultRadialGradientPositions);
-    const radialGradientColors = theme('radialGradients.colors', defaultRadialGradientColors);
-    const radialGradientVariants = variants('radialGradients', defaultRadialGradientVariants);
-    const conicGradientStartingAngles = theme('conicGradients.startingAngles', defaultConicGradientStartingAngles);
-    const conicGradientPositions = theme('conicGradients.positions', defaultConicGradientPositions);
-    const conicGradientColors = theme('conicGradients.colors', defaultConicGradientColors);
-    const conicGradientVariants = variants('conicGradients', defaultConicGradientVariants);
-    const repeatingLinearGradientDirections = theme('repeatingLinearGradients.directions', defaultRepeatingLinearGradientDirections);
-    const repeatingLinearGradientColors = theme('repeatingLinearGradients.colors', defaultRepeatingLinearGradientColors);
-    const repeatingLinearGradientLengths = theme('repeatingLinearGradients.lengths', defaultRepeatingLinearGradientLengths);
-    const repeatingLinearGradientVariants = variants('repeatingLinearGradients', defaultRepeatingLinearGradientVariants);
-    const repeatingRadialGradientShapes = theme('repeatingRadialGradients.shapes', defaultRepeatingRadialGradientShapes);
-    const repeatingRadialGradientSizes = theme('repeatingRadialGradients.sizes', defaultRepeatingRadialGradientSizes);
-    const repeatingRadialGradientPositions = theme('repeatingRadialGradients.positions', defaultRepeatingRadialGradientPositions);
-    const repeatingRadialGradientColors = theme('repeatingRadialGradients.colors', defaultRepeatingRadialGradientColors);
-    const repeatingRadialGradientLengths = theme('repeatingRadialGradients.lengths', defaultRepeatingRadialGradientLengths);
-    const repeatingRadialGradientVariants = variants('repeatingRadialGradients', defaultRepeatingRadialGradientVariants);
-    const repeatingConicGradientStartingAngles = theme('repeatingConicGradients.startingAngles', defaultRepeatingConicGradientStartingAngles);
-    const repeatingConicGradientPositions = theme('repeatingConicGradients.positions', defaultRepeatingConicGradientPositions);
-    const repeatingConicGradientColors = theme('repeatingConicGradients.colors', defaultRepeatingConicGradientColors);
-    const repeatingConicGradientLengths = theme('repeatingConicGradients.lengths', defaultRepeatingConicGradientLengths);
-    const repeatingConicGradientVariants = variants('repeatingConicGradients', defaultRepeatingConicGradientVariants);
-
-    const linearGradientSelector = function(directionKey, colorKey, lengthKey) {
-      return `.${e(`bg-gradient-${directionKey}-${colorKey}${lengthKey ? `-${lengthKey}` : ''}`)}`;
-    };
-
-    const linearGradientValue = function(direction, colors, length) {
-      const cssDefaultLinearGradientDirections = ['to bottom', '180deg', '0.5turn', '200grad', '3.1416rad'];
-      return `${!_.isNil(length) ? 'repeating-' : ''}linear-gradient(${_.includes(cssDefaultLinearGradientDirections, direction) ? '' : `${direction}, `}${colors.join(', ')}${length ? ` ${length}` : ''})`;
-    };
-
-    const radialGradientSelector = function(shapeKey, sizeKey, positionKey, colorKey, lengthKey) {
-      return `.${e(`bg-radial${shapeKey === 'default' ? '' : `-${shapeKey}`}${sizeKey === 'default' ? '' : `-${sizeKey}`}${positionKey === 'default' ? '' : `-${positionKey}`}-${colorKey}${lengthKey ? `-${lengthKey}` : ''}`)}`;
-    };
-
-    const radialGradientValue = function(shape, size, position, colors, length) {
-      const cssDefaultRadialGradientShape = 'ellipse';
-      const cssDefaultRadialGradientSize = 'farthest-corner';
-      const cssDefaultRadialGradientPositions = ['center', 'center center', '50%', '50% 50%', 'center 50%', '50% center'];
-      const firstArgumentValues = [];
-      if (shape !== cssDefaultRadialGradientShape) {
-        firstArgumentValues.push(shape);
-      }
-      if (size !== cssDefaultRadialGradientSize) {
-        firstArgumentValues.push(size);
-      }
-      if (!_.includes(cssDefaultRadialGradientPositions, position)) {
-        firstArgumentValues.push(`at ${position}`);
-      }
-      return `${!_.isNil(length) ? 'repeating-' : ''}radial-gradient(${firstArgumentValues.length > 0 ? `${firstArgumentValues.join(' ')}, ` : ''}${colors.join(', ')}${length ? ` ${length}` : ''})`;
-    };
-
-    const conicGradientSelector = function(startingAngleKey, positionKey, colorKey, lengthKey) {
-      return `.${e(`bg-conic${startingAngleKey === 'default' ? '' : `-${startingAngleKey}`}${positionKey === 'default' ? '' : `-${positionKey}`}-${colorKey}${lengthKey ? `-${lengthKey}` : ''}`)}`;
-    };
-
-    const conicGradientValue = function(startingAngle, position, colors, length) {
-      const cssDefaultConicGradientStartingAngles = ['0', '0deg', '0%', '0turn', '0grad', '0rad'];
-      const cssDefaultConicGradientPositions = ['center', 'center center', '50%', '50% 50%', 'center 50%', '50% center'];
-      const firstArgumentValues = [];
-      if (!_.includes(cssDefaultConicGradientStartingAngles, startingAngle)) {
-        firstArgumentValues.push(`from ${startingAngle}`);
-      }
-      if (!_.includes(cssDefaultConicGradientPositions, position)) {
-        firstArgumentValues.push(`at ${position}`);
-      }
-      return `${!_.isNil(length) ? 'repeating-' : ''}conic-gradient(${firstArgumentValues.length > 0 ? `${firstArgumentValues.join(' ')}, ` : ''}${colors.join(', ')}${length ? ` ${length}` : ''})`;
-    };
-
-    const backgroundImageUtilities = {
-      '.bg-none': {
-        backgroundImage: 'none',
-      },
-    };
-
-    const linearGradientUtilities = (function() {
-      const utilities = {};
-      _.forEach(flattenColorPalette(linearGradientColors), (colors, colorKey) => {
-        colors = normalizeColors(colors, true);
-        if (!colors) {
-          return; // continue
-        }
-        _.forEach(linearGradientDirections, (direction, directionKey) => {
-          utilities[linearGradientSelector(directionKey, colorKey)] = {
-            backgroundImage: linearGradientValue(direction, colors),
-          };
-        });
-      });
-      return utilities;
-    })();
-
-    const radialGradientUtilities = (function() {
-      const utilities = {};
-      _.forEach(flattenColorPalette(radialGradientColors), (colors, colorKey) => {
-        colors = normalizeColors(colors, false);
-        if (!colors) {
-          return; // continue
-        }
-        _.forEach(radialGradientPositions, (position, positionKey) => {
-          _.forEach(radialGradientSizes, (size, sizeKey) => {
-            _.forEach(radialGradientShapes, (shape, shapeKey) => {
-              utilities[radialGradientSelector(shapeKey, sizeKey, positionKey, colorKey)] = {
-                backgroundImage: radialGradientValue(shape, size, position, colors),
-              };
-            });
-          });
-        });
-      });
-      return utilities;
-    })();
-
-    const conicGradientUtilities = (function() {
-      const utilities = {};
-      _.forEach(flattenColorPalette(conicGradientColors), (colors, colorKey) => {
-        colors = normalizeColors(colors, false);
-        if (!colors) {
-          return; // continue
-        }
-        _.forEach(conicGradientPositions, (position, positionKey) => {
-          _.forEach(conicGradientStartingAngles, (startingAngle, startingAngleKey) => {
-            utilities[conicGradientSelector(startingAngleKey, positionKey, colorKey)] = {
-              backgroundImage: conicGradientValue(startingAngle, position, colors),
-            };
-          });
-        });
-      });
-      return utilities;
-    })();
-
-    const repeatingLinearGradientUtilities = (function() {
-      const utilities = {};
-      _.forEach(repeatingLinearGradientLengths, (length, lengthKey) => {
-        _.forEach(flattenColorPalette(repeatingLinearGradientColors), (colors, colorKey) => {
-          colors = normalizeColors(colors, true);
-          if (!colors) {
-            return; // continue
-          }
-          _.forEach(repeatingLinearGradientDirections, (direction, directionKey) => {
-            utilities[linearGradientSelector(directionKey, colorKey, lengthKey)] = {
-              backgroundImage: linearGradientValue(direction, colors, length),
-            };
-          });
-        });
-      });
-      return utilities;
-    })();
-
-    const repeatingRadialGradientUtilities = (function() {
-      const utilities = {};
-      _.forEach(repeatingRadialGradientLengths, (length, lengthKey) => {
-        _.forEach(flattenColorPalette(repeatingRadialGradientColors), (colors, colorKey) => {
-          colors = normalizeColors(colors, false);
-          if (!colors) {
-            return; // continue
-          }
-          _.forEach(repeatingRadialGradientPositions, (position, positionKey) => {
-            _.forEach(repeatingRadialGradientSizes, (size, sizeKey) => {
-              _.forEach(repeatingRadialGradientShapes, (shape, shapeKey) => {
-                utilities[radialGradientSelector(shapeKey, sizeKey, positionKey, colorKey, lengthKey)] = {
-                  backgroundImage: radialGradientValue(shape, size, position, colors, length),
-                };
-              });
-            });
-          });
-        });
-      });
-      return utilities;
-    })();
-
-    const repeatingConicGradientUtilities = (function() {
-      const utilities = {};
-      _.forEach(repeatingConicGradientLengths, (length, lengthKey) => {
-        _.forEach(flattenColorPalette(repeatingConicGradientColors), (colors, colorKey) => {
-          colors = normalizeColors(colors, false);
-          if (!colors) {
-            return; // continue
-          }
-          _.forEach(repeatingConicGradientPositions, (position, positionKey) => {
-            _.forEach(repeatingConicGradientStartingAngles, (startingAngle, startingAngleKey) => {
-              utilities[conicGradientSelector(startingAngleKey, positionKey, colorKey, lengthKey)] = {
-                backgroundImage: conicGradientValue(startingAngle, position, colors, length),
-              };
-            });
-          });
-        });
-      });
-      return utilities;
-    })();
-
-    addUtilities(backgroundImageUtilities, backgroundImageVariants);
-    addUtilities(linearGradientUtilities, linearGradientVariants);
-    addUtilities(radialGradientUtilities, radialGradientVariants);
-    addUtilities(conicGradientUtilities, conicGradientVariants);
-    addUtilities(repeatingLinearGradientUtilities, repeatingLinearGradientVariants);
-    addUtilities(repeatingRadialGradientUtilities, repeatingRadialGradientVariants);
-    addUtilities(repeatingConicGradientUtilities, repeatingConicGradientVariants);
-  };
-};
+    },
+    repeatingRadialGradientPositions: theme => theme('radialGradientPositions'),
+    repeatingRadialGradientColors: {},
+    repeatingRadialGradientLengths: {},
+    repeatingConicGradientStartingAngles: theme => theme('conicGradientStartingAngles'),
+    repeatingConicGradientPositions: theme => theme('conicGradientPositions'),
+    repeatingConicGradientColors: {},
+    repeatingConicGradientLengths: {},
+  },
+  variants: {
+    backgroundImage: ['responsive'],
+    linearGradients: ['responsive'],
+    radialGradients: ['responsive'],
+    conicGradients: ['responsive'],
+    repeatingLinearGradients: ['responsive'],
+    repeatingRadialGradients: ['responsive'],
+    repeatingConicGradients: ['responsive'],
+  },
+});

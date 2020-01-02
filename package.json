@@ -21,6 +21,6 @@
     "jest-matcher-css": "^1.1.0",
     "postcss": "^7.0.26",
     "release-it": "^12.4.3",
-    "tailwindcss": "^1.1.4"
+    "tailwindcss": "^1.2.0-canary.2"
   }
 }

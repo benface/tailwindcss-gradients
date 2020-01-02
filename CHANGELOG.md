@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project mostly adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.0] - XXXX-XX-XX
+
+### Changed
+- Changed to use Tailwind 1.2’s new plugin definition syntax
+- Flattened the theme configuration in order to support `theme.extend` which only allows extending top-level objects; in other words, the `linearGradients` object that contained nested `directions` and `colors` objects has been replaced by two top-level theme objects, `linearGradientDirections` and `linearGradientColors`; same for `radialGradients` (`radialGradientShapes`, `radialGradientSizes`, etc.), `conicGradients` (`conicGradientStartingAngles`, `conicGradientPositions`, etc.), `repeatingLinearGradients`, `repeatingRadialGradients`, and `repeatingConicGradients`
+
 ## [2.3.1] - 2019-09-01
 
 ### Fixed
@@ -84,8 +90,9 @@ and this project mostly adheres to [Semantic Versioning](https://semver.org/spec
 
 Initial release
 
-[Unreleased]: https://github.com/benface/tailwindcss-gradients/compare/v2.3.1...HEAD
-[2.3.0]: https://github.com/benface/tailwindcss-gradients/compare/v2.3.0...v2.3.1
+[Unreleased]: https://github.com/benface/tailwindcss-gradients/compare/v3.0.0...HEAD
+[3.0.0]: https://github.com/benface/tailwindcss-gradients/compare/v2.3.1...v3.0.0
+[2.3.1]: https://github.com/benface/tailwindcss-gradients/compare/v2.3.0...v2.3.1
 [2.3.0]: https://github.com/benface/tailwindcss-gradients/compare/v2.2.0...v2.3.0
 [2.2.0]: https://github.com/benface/tailwindcss-gradients/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/benface/tailwindcss-gradients/compare/v2.0.1...v2.1.0
