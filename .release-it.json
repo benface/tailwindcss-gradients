@@ -1,5 +1,6 @@
 {
   "git": {
-    "tagName": "v%s"
+    "tagName": "v%s",
+    "requireCleanWorkingDir": false
   }
 }
