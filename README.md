@@ -1,5 +1,9 @@
 # Gradients Plugin for Tailwind CSS
 
+## Requirements
+
+This plugin requires Tailwind CSS 1.2 or later. If your project uses an older version of Tailwind, you should install the latest 2.x version of this plugin (`npm install tailwindcss-gradients@2.x`).
+
 ## Installation
 
 ```bash
