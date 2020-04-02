@@ -97,7 +97,7 @@ module.exports = {
       'checkerboard': ['white 90deg', 'black 90deg 180deg', 'white 180deg 270deg', 'black 270deg'],
     },
     repeatingLinearGradientDirections: theme => theme('linearGradientDirections'), // defaults to this value
-    repeatingLinearGradientColors: theme('linearGradientColors'), // defaults to {}
+    repeatingLinearGradientColors: theme => theme('linearGradientColors'), // defaults to {}
     repeatingLinearGradientLengths: { // defaults to {}
       'sm': '25px',
       'md': '50px',
@@ -108,7 +108,7 @@ module.exports = {
       'default': 'farthest-corner',
     },
     repeatingRadialGradientPositions: theme => theme('radialGradientPositions'), // defaults to this value
-    repeatingRadialGradientColors: theme('radialGradientColors'), // defaults to {}
+    repeatingRadialGradientColors: theme => theme('radialGradientColors'), // defaults to {}
     repeatingRadialGradientLengths: { // defaults to {}
       'sm': '25px',
       'md': '50px',
