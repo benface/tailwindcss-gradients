@@ -1,3 +1,7 @@
+# [BLACK LIVES MATTER](https://blacklivesmatters.carrd.co)
+
+### Be aware. Be angry. Do better. Demand change. Show your support any way you can. Click on the link above to find protests, petitions, and other ways to help. DO NOT LET IT GO SILENT.
+
 # Gradients Plugin for Tailwind CSS
 
 ## Requirements
