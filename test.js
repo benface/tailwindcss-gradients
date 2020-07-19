@@ -123,6 +123,8 @@ test('linear gradients have default directions', () => {
       .bg-gradient-tl-red {
         background-image: linear-gradient(to top left, rgba(255, 0, 0, 0), #f00);
       }
+      @media (min-width: 640px) {
+      }
     `);
   });
 });
@@ -170,6 +172,8 @@ test('radial gradients have a default shape, size, and positions', () => {
       .bg-radial-tl-red {
         background-image: radial-gradient(closest-side at top left, #f00, rgba(255, 0, 0, 0));
       }
+      @media (min-width: 640px) {
+      }
     `);
   });
 });
@@ -216,6 +220,8 @@ test('conic gradients have a default starting angle and positions', () => {
       }
       .bg-conic-tl-red {
         background-image: conic-gradient(at top left, #f00, rgba(255, 0, 0, 0));
+      }
+      @media (min-width: 640px) {
       }
     `);
   });
@@ -273,6 +279,8 @@ test('directions and positions can be customized', () => {
       }
       .bg-conic-almost-right-red {
         background-image: conic-gradient(at 90% center, #f00, rgba(255, 0, 0, 0));
+      }
+      @media (min-width: 640px) {
       }
     `);
   });
@@ -403,6 +411,8 @@ test('directions and positions can be extended', () => {
       .bg-conic-almost-right-red {
         background-image: conic-gradient(at 90% center, #f00, rgba(255, 0, 0, 0));
       }
+      @media (min-width: 640px) {
+      }
     `);
   });
 });
@@ -460,6 +470,8 @@ test('gradients can have multiple colors', () => {
       }
       .bg-conic-blue-green-red {
         background-image: conic-gradient(#0f0, #f00, #f00);
+      }
+      @media (min-width: 640px) {
       }
     `);
   });
@@ -540,6 +552,8 @@ test('multiple directions/positions and multiple colors can be used together', (
       .bg-conic-right-yellow {
         background-image: conic-gradient(at right, #ff0, rgba(255, 255, 0, 0));
       }
+      @media (min-width: 640px) {
+      }
     `);
   });
 });
@@ -595,6 +609,8 @@ test('colors can be referenced from the theme with a closure', () => {
       }
       .bg-conic-blue {
         background-image: conic-gradient(#00f, rgba(0, 0, 255, 0));
+      }
+      @media (min-width: 640px) {
       }
     `);
   });
@@ -663,6 +679,8 @@ test('colors can use nested object notation', () => {
       }
       .bg-conic-indigo-dark {
         background-image: conic-gradient(#202e78, rgba(32, 46, 120, 0));
+      }
+      @media (min-width: 640px) {
       }
     `);
   });
@@ -737,6 +755,8 @@ test('color keywords are accepted', () => {
       .bg-conic-b-current {
         background-image: conic-gradient(at bottom, currentColor, transparent);
       }
+      @media (min-width: 640px) {
+      }
     `);
   });
 });
@@ -783,6 +803,8 @@ test('some keywords such as "inherit" are skipped', () => {
       }
       .bg-conic-b-red {
         background-image: conic-gradient(at bottom, #f00, rgba(255, 0, 0, 0));
+      }
+      @media (min-width: 640px) {
       }
     `);
   });
@@ -866,6 +888,8 @@ test('radial gradient shapes and sizes can be customized', () => {
       .bg-radial-ellipse-cover-tr-green-blue {
         background-image: radial-gradient(at top right, #0f0, #00f);
       }
+      @media (min-width: 640px) {
+      }
     `);
   });
 });
@@ -907,6 +931,8 @@ test('conic gradient starting angles can be customized', () => {
       .bg-conic-reverse-green-blue {
         background-image: conic-gradient(from 0.5turn, #0f0, #00f);
       }
+      @media (min-width: 640px) {
+      }
     `);
   });
 });
@@ -932,6 +958,8 @@ test('there is no output for repeating gradients without lengths', () => {
     expect(css).toMatchCss(`
       .bg-none {
         background-image: none;
+      }
+      @media (min-width: 640px) {
       }
     `);
   });
@@ -1036,6 +1064,8 @@ test('lengths can be customized', () => {
       }
       .bg-conic-blue-lg {
         background-image: repeating-conic-gradient(#00f, rgba(0, 0, 255, 0) 40deg);
+      }
+      @media (min-width: 640px) {
       }
     `);
   });

@@ -13,14 +13,14 @@
   },
   "dependencies": {
     "color": "^3.1.2",
-    "lodash": "^4.17.15"
+    "lodash": "^4.17.19"
   },
   "devDependencies": {
-    "github-release-from-changelog": "^2.1.0",
-    "jest": "^25.1.0",
+    "github-release-from-changelog": "^2.1.1",
+    "jest": "^26.1.0",
     "jest-matcher-css": "^1.1.0",
-    "postcss": "^7.0.26",
-    "release-it": "^12.4.3",
-    "tailwindcss": "^1.2.0"
+    "postcss": "^7.0.32",
+    "release-it": "^13.6.5",
+    "tailwindcss": "^1.5.1"
   }
 }
