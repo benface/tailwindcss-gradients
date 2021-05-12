@@ -19,7 +19,7 @@
     "github-release-from-changelog": "^2.1.1",
     "jest": "^26.1.0",
     "jest-matcher-css": "^1.1.0",
-    "postcss": "^7.0.32",
+    "postcss": "^8.2.10",
     "release-it": "^13.6.5",
     "tailwindcss": "^1.5.1"
   }
